@@ -6,7 +6,7 @@ namespace BlogPhone.Pages
 {
     public class RegisteredModel : PageModel
     {
-
+        // https://localhost:7230/Auth/Registered/00000000-0000-0000-0000-000000000000
         public IActionResult OnGet(string regkey)
         {
             foreach (string key in RegisteredOptions.regKeys.ToList())
@@ -17,7 +17,7 @@ namespace BlogPhone.Pages
                     return Page();
                 }
             }
-            return NotFound();
+            return RedirectToPage("/Index");
         }
     }
 }
