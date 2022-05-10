@@ -25,7 +25,7 @@
 		"@@context": "http://schema.org",
 		"@@type": "Organization",
 		"name": "AdminPanel_NPD",
-		"logo": "~/images/default-logo.png"
+		"logo": "images/default-logo.png"
 }</script>
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="Вход">
@@ -83,16 +83,16 @@
         <div class="u-form u-radius-10 u-white u-form-1">
           <form method="post" asp-antiforgery="true" class="u-clearfix u-form-spacing-15 u-form-vertical u-inner-form" source="email" name="form" style="padding: 28px;">
             <div class="u-form-group u-form-name">
-              <label for="name-4c18" class="u-label">Имя</label>
-              <input type="text" placeholder="Введите ваше имя" id="name-4c18" name="name" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
+              <label for="UserName" asp-for="UserName" class="u-label">Имя</label>
+              <input type="text" placeholder="Введите ваше имя" asp-for="UserName" id="UserName" name="UserName" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
             </div>
             <div class="u-form-email u-form-group">
-              <label for="email-4c18" class="u-label">Пароль</label>
-              <input type="email" placeholder="Введите ваш пароль" id="email-4c18" name="password" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
+              <label for="UserPassword" asp-for="UserPassword" class="u-label">Пароль</label>
+              <input type="password" placeholder="Введите ваш пароль" asp-for="UserPassword" id="UserPassword" name="UserPassword" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
             </div>
             <div class="u-form-agree u-form-group u-form-group-3">
-              <input type="checkbox" id="agree-a472" name="agree" class="u-agree-checkbox" required="">
-              <label for="agree-a472" class="u-label">Запомнить меня</label>
+              <input type="checkbox" id="UserSaveMe" name="UserSaveMe" asp-for="UserSaveMe" class="u-agree-checkbox">
+              <label for="UserSaveMe" asp-for="UserSaveMe" class="u-label">Запомнить меня</label>
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               @*<a href="#" class="u-active-palette-3-dark-3 u-border-2 u-border-active-palette-3-dark-3 u-border-hover-palette-3-dark-2 u-border-palette-3-dark-1 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-3-dark-2 u-palette-3-light-1 u-radius-10 u-btn-1">вход<br>
@@ -105,24 +105,12 @@
             <input type="hidden" value="" name="recaptchaResponse">*@
           </form>
         </div>
-        <a href="https://nicepage.com/c/product-list-website-templates" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-3-dark-2 u-btn u-button-style u-none u-text-palette-3-dark-1 u-btn-2">Зарегистрироваться</a>
+        <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-3-dark-2 u-btn u-button-style u-none u-text-palette-3-dark-1 u-btn-2" asp-page="Auth/Register">Зарегистрироваться</a>
       </div>
     </section>
-    
     
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-9799"><div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">copyright 2022</p>
       </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <a class="u-link" href="https://nicepage.com/html-templates" target="_blank">
-        <span>HTML Template</span>
-      </a>
-      <p class="u-text">
-        <span>created with</span>
-      </p>
-      <a class="u-link" href="https://nicepage.one" target="_blank">
-        <span>Website Builder</span>
-      </a>. 
-    </section>
   </body>
 </html>
