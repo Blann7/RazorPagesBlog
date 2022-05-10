@@ -1,0 +1,29 @@
+﻿@page
+@model BlogPhone.Pages.AddArtModel
+@{
+    ViewData["Title"] = "Добавить статью";
+}
+
+<h1>Создание новой статьи</h1>
+
+<form method="post" asp-antiforgery="true" enctype="multipart/form-data">
+
+    <h3>Название статьи</h3>
+    <textarea asp-for="Label" type="text" required cols=100 rows=2></textarea>
+    <br>
+
+    <h3>Текст статьи</h3>
+    <textarea asp-for="AricleText" type="text" required cols=100 rows=20></textarea>
+
+    <br>
+
+    <h3>Фото к статье</h3>
+    <input asp-for="Image" type="file" name="image" />
+
+
+    <br> <br>
+
+    <input type="submit" value="Создать" />
+</form>
+
+<h1>@Model.Message</h1>
