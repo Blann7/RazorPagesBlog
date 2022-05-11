@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace BlogPhone.Pages.Auth
 {
@@ -16,23 +15,21 @@ namespace BlogPhone.Pages.Auth
         [BindProperty] public string? UserName { get; set; }
         [BindProperty] public string? UserPassword { get; set; }
         [BindProperty] public bool UserSaveMe { get; set; } = false;
-        public List<User> SiteUsers { get; set; } = new();
+        public bool IsModalShow { get; set; } = false;
+        public string Message { get; set; } = "";
 
         public LoginModel(ApplicationContext db)
         {
             context = db;
         }
 
-        public async Task OnGetAsync()
-        {
-            SiteUsers = await context.Users.AsNoTracking().ToListAsync();
-        }
+        public void OnGet()
+        { }
 
         public async Task<IActionResult> OnPostAsync()
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
             if (user is null) return Content("Пользователь с такими данными не найден!", "text/html", Encoding.UTF8);
-            // u => u.Name == UserName && u.Password == UserPassword
 
             List<Claim> claims = new List<Claim> {
                 new Claim("Id", user.Id.ToString())
@@ -52,7 +49,7 @@ namespace BlogPhone.Pages.Auth
                 await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1) });
+                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2) });
             }
 
             return Content("Вы успешно вошли", "text/html", Encoding.UTF8);
