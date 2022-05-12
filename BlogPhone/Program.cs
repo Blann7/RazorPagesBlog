@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +16,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Auth/Login";
         options.LogoutPath = "/Auth/Logout";
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
-        options.Cookie.Name = "test";
+        options.Cookie.Name = "auth";
     });
 builder.Services.AddAuthorization();
 

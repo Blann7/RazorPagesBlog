@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
 using System.Text;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 
 namespace BlogPhone.Pages
 {
@@ -15,15 +12,10 @@ namespace BlogPhone.Pages
         [BindProperty] public User SiteUser { get; set; } = new();
 
         public RegisterModel(ApplicationContext db)
-        {
-            context = db;
+        { 
+            context = db; 
         }
-
-        public void OnGet()
-        {
-
-        }
-
+        public void OnGet() { }
         public async Task<IActionResult> OnPostAsync()
         {
             string confirmPassword = Request.Form["passwordagain"];
@@ -43,25 +35,7 @@ namespace BlogPhone.Pages
             await context.Users.AddAsync(SiteUser);
             await context.SaveChangesAsync();
 
-            //await SetClaimsAsync();
-
-            return Content("Вы успешно зарегистрировались!", "text/html", Encoding.UTF8);
-        }
-
-        public async Task SetClaimsAsync()
-        {
-            if (SiteUser.Name is null || SiteUser.Email is null) return;
-
-            List<Claim> claims = new List<Claim> { 
-                new Claim(ClaimTypes.Name, SiteUser.Name), 
-                new Claim(ClaimTypes.Email, SiteUser.Email)
-            };
-
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, 
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                new ClaimsPrincipal(claimsIdentity));
+            return RedirectToPage("/Auth/Login");
         }
     }
 }

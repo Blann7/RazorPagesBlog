@@ -52,7 +52,7 @@ namespace BlogPhone.Pages.Auth
                 new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2) });
             }
 
-            return Content("Вы успешно вошли", "text/html", Encoding.UTF8);
+            return RedirectToPage("/Index");
         }
     }
 }

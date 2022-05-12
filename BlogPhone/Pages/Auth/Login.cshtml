@@ -14,9 +14,9 @@
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>Вход</title>
     <link rel="stylesheet" href="~/css/nicepage.css" media="screen">
-<link rel="stylesheet" href="~/css/login.css" media="screen">
-    @*<script class="u-script" type="text/javascript" src="~/js/jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="~/js/nicepage.js" defer=""></script>*@
+    <link rel="stylesheet" href="~/css/login.css" media="screen">
+    <script class="u-script" type="text/javascript" src="~/js/jquery.js" defer=""></script>
+    @*<script class="u-script" type="text/javascript" src="~/js/nicepage.js" defer=""></script>*@
     <meta name="generator" content="Nicepage 4.10.5, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     
@@ -32,8 +32,8 @@
     <meta property="og:type" content="website">
   </head>
   <body class="u-body u-xl-mode"><header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
-          <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
+        <a asp-page="Index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
+          <img src="~/images/default-logo.png" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
           <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
@@ -44,10 +44,10 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="Index">Главное</a>
+            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Index">Главное</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">Тарифы</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="Auth/Register">Регистрация</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Register">Регистрация</a>
 </li></ul>
 </div>
 </li></ul>
@@ -56,10 +56,10 @@
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="Index">Главное</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Index">Главное</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link">Тарифы</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="Auth/Register">Регистрация</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Register">Регистрация</a>
 </li></ul>
 </div>
 </li></ul>
@@ -78,17 +78,19 @@
 	c-9.9,3.7-17,11.6-20.1,21c-3.3,10.1-10.9,18-20.6,22.2c-0.1,0-0.1,0.1-0.2,0.1c-20.3,8.9-31,32-24.6,53.2
 	C6.9,115.6,25.2,125.2,43.2,126.9z"></path></svg>
         </div>
-        <div class="u-align-left u-image u-image-circle u-preserve-proportions u-image-1" data-image-width="616" data-image-height="616"></div>
+        <div >
+            <img src="~/images/logcat.jpg" class="u-align-left u-image u-image-circle u-preserve-proportions u-image-1" data-image-width="616" data-image-height="616" />
+        </div>
         <div class="u-palette-3-base u-shape u-shape-circle u-shape-2"></div>
         <div class="u-form u-radius-10 u-white u-form-1">
           <form method="post" asp-antiforgery="true" class="u-clearfix u-form-spacing-15 u-form-vertical u-inner-form" source="email" name="form" style="padding: 28px;">
             <div class="u-form-group u-form-name">
               <label for="UserName" asp-for="UserName" class="u-label">Имя</label>
-              <input type="text" placeholder="Введите ваше имя" asp-for="UserName" id="UserName" name="UserName" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
+              <input type="text" placeholder="Введите ваше имя" asp-for="UserName" autocomplete="on" id="UserName" name="UserName" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
             </div>
             <div class="u-form-email u-form-group">
               <label for="UserPassword" asp-for="UserPassword" class="u-label">Пароль</label>
-              <input type="password" placeholder="Введите ваш пароль" asp-for="UserPassword" id="UserPassword" name="UserPassword" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
+              <input type="password" placeholder="Введите ваш пароль" asp-for="UserPassword" autocomplete="on" id="UserPassword" name="UserPassword" class="u-border-2 u-border-palette-3-dark-1 u-input u-input-rectangle u-palette-3-light-1 u-radius-10" required="" maxlength="20">
             </div>
             <div class="u-form-agree u-form-group u-form-group-3">
               <input type="checkbox" id="UserSaveMe" name="UserSaveMe" asp-for="UserSaveMe" class="u-agree-checkbox">

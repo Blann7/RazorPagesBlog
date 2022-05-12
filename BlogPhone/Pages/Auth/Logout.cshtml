@@ -1,0 +1,19 @@
+﻿@page
+@model BlogPhone.Pages.Auth.LogoutModel
+@{
+    Layout = null;
+}
+
+@if(Model.Success)
+{
+    <text>
+        <h1 style="text-align:center; margin-top:100px; color:green">Вы вышли!</h1>
+    </text>
+}
+else
+{
+    <text>
+        <h1 style="text-align:center; margin-top:100px; color:red">Ошибка выхода 001.</h1>
+    </text>
+}
+
