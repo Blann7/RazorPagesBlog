@@ -26,9 +26,6 @@
     <None Include="wwwroot\css\Index.css" />
     <None Include="wwwroot\css\AboutUs.css" />
     <None Include="wwwroot\css\tariffs.css" />
-    <None Include="wwwroot\images\1.jpeg" />
-    <None Include="wwwroot\images\2.jpeg" />
-    <None Include="wwwroot\images\3.jpeg" />
     <None Include="wwwroot\images\default-logo.png" />
     <None Include="wwwroot\js\jquery.js" />
     <None Include="wwwroot\js\nicepage.js" />

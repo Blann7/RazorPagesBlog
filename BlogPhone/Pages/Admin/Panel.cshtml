@@ -1,3 +1,9 @@
+﻿@page
+@model BlogPhone.Pages.Admin.PanelModel
+@{
+    Layout = null;
+}
+
 <!DOCTYPE html>
 <html style="font-size: 16px;">
   <head>
@@ -7,17 +13,17 @@
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>adminpanel</title>
-    <link rel="stylesheet" href="nicepage.css" media="screen">
-<link rel="stylesheet" href="adminpanel.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <link rel="stylesheet" href="~/css/nicepage.css" media="screen">
+<link rel="stylesheet" href="~/css/adminpanel.css" media="screen">
+    <script class="u-script" type="text/javascript" src="~/js/jquery.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="~/js/nicepage.js" defer=""></script>
     <meta name="generator" content="Nicepage 4.10.5, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     
     
     <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
+		"@@context": "http://schema.org",
+		"@@type": "Organization",
 		"name": "AdminPanel_NPD",
 		"logo": "images/default-logo.png"
 }</script>
@@ -26,8 +32,8 @@
     <meta property="og:type" content="website">
   </head>
   <body class="u-body u-xl-mode"><header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
-          <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
+        <a asp-page="/Index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
+          <img src="~/images/default-logo.png" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
           <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
@@ -38,22 +44,43 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">Главное</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">Тарифы</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white">Регистрация</a>
-</li></ul>
-</div>
-</li></ul>
+            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/AboutUs">О нас</a>
+</li>
+
+@if(Model.IsAuthorize)
+{
+    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Office/User">@Model.SiteUser!.Email</a>
+        <div class="u-nav-popup">
+            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
+                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Logout">Выход</a></li>
+            </ul>
+        </div>
+    </li>   
+}
+else
+{
+    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Auth/Login">Вход</a>
+        <div class="u-nav-popup">
+            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
+                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Register">Регистрация</a></li>
+            </ul>
+        </div>
+    </li>   
+}
+
+
+</ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link">Главное</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link">Тарифы</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link">Регистрация</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/AboutUs">О нас</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Register">Регистрация</a>
 </li></ul>
 </div>
 </li></ul>
