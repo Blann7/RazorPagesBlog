@@ -21,13 +21,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddAuthorization();
 
-//builder.Services.AddDistributedMemoryCache();
-//builder.Services.AddSession(options =>
-//{
-//    options.Cookie.IsEssential = true;
-//    options.Cookie.Expiration = TimeSpan.FromDays(30);
-//});
-
 
 var app = builder.Build();
 
@@ -39,7 +32,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

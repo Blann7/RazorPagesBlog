@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages.Admin
 {
-    // AUTHORIZE WORKING!
+    [Authorize(Roles = "admin, moder")]
     public class PanelModel : PageModel
     {
         ApplicationContext context;
@@ -18,17 +19,10 @@ namespace BlogPhone.Pages.Admin
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
-            {
-                if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/Auth/Logout");
-                int Id = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return RedirectToPage("/Auth/Logout");
 
-                SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
-                if (SiteUser is null) return RedirectToPage("/Auth/Logout");
-
-                IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
-            }
-
+            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             return Page();
         }
     }

@@ -49,26 +49,13 @@
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/AboutUs">О нас</a>
 </li>
 
-@if(Model.IsAuthorize)
-{
-    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Office/User">@Model.SiteUser!.Email</a>
-        <div class="u-nav-popup">
-            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
-                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Logout">Выход</a></li>
-            </ul>
-        </div>
-    </li>   
-}
-else
-{
-    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Auth/Login">Вход</a>
-        <div class="u-nav-popup">
-            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
-                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Register">Регистрация</a></li>
-            </ul>
-        </div>
-    </li>   
-}
+<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Office/User">@Model.SiteUser!.Email</a>
+    <div class="u-nav-popup">
+        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
+            <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Logout">Выход</a></li>
+        </ul>
+    </div>
+</li>   
 
 
 </ul>
@@ -107,7 +94,7 @@ else
             </div>
             <div class="u-border-2 u-border-grey-75 u-container-style u-list-item u-radius-6 u-repeater-item u-shape-round">
               <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-3">
-                <a href="https://nicepage.com" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-3">Руководители<br>
+                <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-3" asp-page="/Admin/Heads">Руководители<br>
                 </a>
               </div>
             </div>

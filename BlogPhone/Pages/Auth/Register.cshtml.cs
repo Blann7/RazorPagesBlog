@@ -32,6 +32,8 @@ namespace BlogPhone.Pages
             if (user is not null) return Content("ѕользователь с такой почтой уже есть!", "text/html", Encoding.UTF8);
             //--------------------
 
+            SiteUser.Role = "user"; // default Role for all site's users
+
             await context.Users.AddAsync(SiteUser);
             await context.SaveChangesAsync();
 

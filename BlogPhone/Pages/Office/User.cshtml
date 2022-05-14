@@ -7,8 +7,15 @@
 <div style="text-align:center; margin-top:70px">
     <h1 style="text-align:center">Личный Кабинет (account id = @Model.SiteUser!.Id)</h1>
     <h3 style="text-align:center">Имя: @Model.SiteUser!.Name</h3>
+    <h3 style="text-align:center; color:gray">Статус: @Model.SiteUser!.Role</h3>
     <h3 style="text-align:center">Почта: @Model.SiteUser!.Email</h3>
     <h3 style="text-align:center">Пароль: @Model.SiteUser!.Password</h3>
 
     <a type="submit" style="margin-top:20px" asp-page="/Index">На главную</a>
+    @if(@Model.SiteUser!.Role == "moder" || @Model.SiteUser!.Role == "admin")
+    {
+        <p>
+            <a type="submit" style="margin-top:20px; color:red" asp-page="/Admin/Panel">Админ-Панель</a>
+        </p>
+    }
 </div>

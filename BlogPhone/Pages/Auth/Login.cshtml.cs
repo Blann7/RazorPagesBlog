@@ -32,7 +32,8 @@ namespace BlogPhone.Pages.Auth
             if (user is null) return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
 
             List<Claim> claims = new List<Claim> {
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.ToString() ?? "undefined")
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
