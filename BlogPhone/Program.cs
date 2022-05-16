@@ -13,11 +13,11 @@ builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServe
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => 
     {
-        options.LoginPath = "/Auth/Login";
-        options.LogoutPath = "/Auth/Logout";
+        options.LoginPath = "/auth/login";
+        options.LogoutPath = "/auth/logout";
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
         options.Cookie.Name = "auth";
-        options.AccessDeniedPath = "/Index";
+        options.AccessDeniedPath = "/index";
     });
 builder.Services.AddAuthorization();
 

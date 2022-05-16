@@ -11,11 +11,11 @@
     <h3 style="text-align:center">Почта: @Model.SiteUser!.Email</h3>
     <h3 style="text-align:center">Пароль: @Model.SiteUser!.Password</h3>
 
-    <a type="submit" style="margin-top:20px" asp-page="/Index">На главную</a>
+    <a type="submit" style="margin-top:20px" asp-page="/index">На главную</a>
     @if(@Model.SiteUser!.Role == "moder" || @Model.SiteUser!.Role == "admin")
     {
         <p>
-            <a type="submit" style="margin-top:20px; color:red" asp-page="/Admin/Panel">Админ-Панель</a>
+            <a type="submit" style="margin-top:20px; color:red" asp-page="/admin/panel">Админ-Панель</a>
         </p>
     }
 </div>

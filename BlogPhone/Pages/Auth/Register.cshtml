@@ -31,7 +31,7 @@
     <meta property="og:type" content="website">
   </head>
   <body data-home-page="Register.cshtml" data-home-page-title="Register" class="u-body u-xl-mode"><header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <a asp-page="Index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
+        <a asp-page="index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
           <img src="~/images/default-logo.png" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
@@ -43,10 +43,10 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Index">Главное</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">Тарифы</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/Auth/Register">Регистрация</a>
+            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/aboutUs">О нас</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/auth/login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/register">Регистрация</a>
 </li></ul>
 </div>
 </li></ul>
@@ -55,10 +55,10 @@
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Index">Главное</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link">Тарифы</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/Auth/Register">Регистрация</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/aboutUs">О нас</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/egister">Регистрация</a>
 </li></ul>
 </div>
 </li></ul>
@@ -106,14 +106,14 @@
             <div class="u-align-left-xs u-align-right-lg u-align-right-md u-align-right-sm u-align-right-xl u-form-group u-form-submit">
               @*<a class="u-active-palette-1-light-1 u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-1-base u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-10 u-btn-1">Зарегистрироваться</a>
               <input type="submit" value="submit" class="u-form-control-hidden">*@
-              <button type="submit" value="Зарегистрироваться" class="u-active-palette-1-light-1 u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-1-base u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-10 u-btn-1">Зарегистрироваться</button>
+              <button type="submit" class="u-active-palette-1-light-1 u-border-2 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-1-base u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-10 u-btn-1">Зарегистрироваться</button>
             </div>
             @*<div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
             <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
             <input type="hidden" value="" name="recaptchaResponse">*@
           </form>
         </div>
-        <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-2">Вход</a>
+        <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-2" asp-page="/auth/login">Авторизоваться</a>
       </div>
     </section>
     
