@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogPhone.Pages.Admin
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")] // step 1 check role
     public class HeadsModel : PageModel
     {
         ApplicationContext context;
@@ -19,10 +19,14 @@ namespace BlogPhone.Pages.Admin
         {
             context = db;
         }
-        public async Task OnGetAsync(string id)
+        public async Task OnGetAsync(string? id) // id is not null in case of delete selected account
         {
             string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) RedirectToPage("/Auth/Logout");
+            if (idString is null) RedirectToPage("/auth/logout");
+
+            bool access = AccessChecker.Check(SiteUser?.Role, "admin"); // step 2 check role
+            if (!access) RedirectToPage("/auth/logout");
+
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
 
             if (id is not null) await SetUserRole(id);
@@ -35,7 +39,7 @@ namespace BlogPhone.Pages.Admin
             if(user is null)
             {
                 Message = $"Пользователь с id {UserId} не найден";
-                return RedirectToPage("/Admin/Heads");
+                return RedirectToPage("/admin/heads");
             }
 
             Message = $"Успешно! || {user.Name}: {user.Role} => {UserRole}";
@@ -43,7 +47,7 @@ namespace BlogPhone.Pages.Admin
 
             await context.SaveChangesAsync();
 
-            return RedirectToPage("/Admin/Heads");
+            return RedirectToPage("/admin/heads");
         }
         private async Task<IActionResult> SetUserRole(string id)
         {
@@ -52,7 +56,7 @@ namespace BlogPhone.Pages.Admin
 
             user.Role = "user";
             await context.SaveChangesAsync();
-            return RedirectToPage("/Admin/Heads");
+            return RedirectToPage("/admin/heads");
         }
     }
 }

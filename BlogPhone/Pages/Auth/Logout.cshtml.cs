@@ -16,7 +16,7 @@ namespace BlogPhone.Pages.Auth
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 Success = true;
-                return RedirectToPage("/Index");
+                return RedirectToPage("/index");
             }
             else
             {

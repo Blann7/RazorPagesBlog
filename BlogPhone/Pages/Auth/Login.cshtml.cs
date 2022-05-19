@@ -26,7 +26,7 @@ namespace BlogPhone.Pages.Auth
         public void OnGet()
         { }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
             if (user is null) return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
@@ -43,17 +43,17 @@ namespace BlogPhone.Pages.Auth
                 await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { IsPersistent = true });
+                new AuthenticationProperties { IsPersistent = true, AllowRefresh = true });
             }
             else
             {
                 await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2) });
+                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2), AllowRefresh = true });
             }
 
-            return RedirectToPage("/Index");
+            return RedirectToPage(returnUrl ?? "/index");
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages.Admin
 {
-    [Authorize(Roles = "admin, moder")]
+    [Authorize(Roles = "admin, moder")] // step 1 check role
     public class PanelModel : PageModel
     {
         ApplicationContext context;
@@ -23,6 +23,16 @@ namespace BlogPhone.Pages.Admin
             if (idString is null) return RedirectToPage("/Auth/Logout");
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+
+            bool access = AccessChecker.Check(SiteUser?.Role, "admin", "moder"); // step 2 check role
+            if (!access) return RedirectToPage("/auth/logout");
+
+            /* 
+             * if step 1 check is ok, but step 2 check is not ok -
+             * we redirecting user to logout page.
+             * It is to avoid using of panel by demoted admins/moders
+             */
+
             return Page();
         }
     }

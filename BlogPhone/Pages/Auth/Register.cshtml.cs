@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
 using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace BlogPhone.Pages
 {
@@ -37,7 +40,24 @@ namespace BlogPhone.Pages
             await context.Users.AddAsync(SiteUser);
             await context.SaveChangesAsync();
 
-            return RedirectToPage("/Auth/Login");
+            // login --------------------------------------
+            User? loginUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
+            if(loginUser is null) return RedirectToPage("/auth/login");
+
+            List<Claim> claims = new List<Claim> {
+                new Claim("Id", loginUser.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, loginUser.Role?.ToString() ?? "undefined")
+            };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(5), AllowRefresh = true });
+            // --------------------------------------------
+
+            return RedirectToPage("/index");
         }
     }
 }

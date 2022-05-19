@@ -29,6 +29,7 @@
     <None Include="wwwroot\images\default-logo.png" />
     <None Include="wwwroot\js\jquery.js" />
     <None Include="wwwroot\js\nicepage.js" />
+    <None Include="wwwroot\css\list2.css" />
   </ItemGroup>
 
   <ItemGroup>

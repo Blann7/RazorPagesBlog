@@ -24,11 +24,11 @@ namespace BlogPhone.Pages
 
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
-                if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/Auth/Logout");
+                if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/auth/logout");
                 int Id = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
 
                 SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
-                if(SiteUser is null) return RedirectToPage("/Auth/Logout");
+                if(SiteUser is null) return RedirectToPage("/auth/logout");
 
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
             }
