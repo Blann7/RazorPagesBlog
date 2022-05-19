@@ -1,0 +1,37 @@
+﻿@page "{id}"
+@model BlogPhone.Pages.admin.userChangeModel
+@{
+    ViewData["Title"] = "user change";
+}
+
+<h1>Изменение личного кабинета пользователя</h1>
+<hr />
+
+<form method="post" asp-antiforgery="true">
+    <label>ID</label>
+    <input disabled type="number" style="margin:5px" value="@Model.SiteUser!.Id" />
+    <br />
+
+    <label>Name</label>
+    <input type="text" style="margin:5px" required name="name" value="@Model.SiteUser!.Name" />
+    <br />
+
+    <label>Password</label>
+    <input type="text" style="margin:5px" required name="password" value="@Model.SiteUser!.Password" />
+    <br />
+
+    <label>Email</label>
+    <input type="email" style="margin:5px" required name="email" value="@Model.SiteUser!.Email" />
+    <br />
+
+    <label>Выберите новую роль (сейчас @Model.SiteUser!.Role)</label>
+    <select style="margin:5px" name="role" required>
+        <option value="user">user</option>
+        <option value="standart">standart</option>
+        <option value="moder">moder</option>
+        <option value="admin">admin</option>
+    </select>
+    <br />
+
+    <button type="submit">Сохранить</button>
+</form>

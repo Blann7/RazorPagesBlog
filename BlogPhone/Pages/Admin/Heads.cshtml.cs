@@ -24,7 +24,7 @@ namespace BlogPhone.Pages.Admin
             string? idString = HttpContext.User.FindFirst("Id")?.Value;
             if (idString is null) RedirectToPage("/auth/logout");
 
-            bool access = AccessChecker.Check(SiteUser?.Role, "admin"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
             if (!access) RedirectToPage("/auth/logout");
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);

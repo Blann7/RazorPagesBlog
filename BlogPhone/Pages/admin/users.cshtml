@@ -47,7 +47,7 @@
             <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/index">Главное</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/rates">Тарифы</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/aboutUs">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" style="color:red" asp-page="/admin/panel">Панель</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/admin/panel">Панель</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/office/user">@Model.SiteUser!.Email</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/logout">Выход</a>
 </li></ul>
 </div>
@@ -72,14 +72,29 @@
         </nav>
       </div>
     </header>
+
     <section class="u-clearfix u-section-1" id="sec-f51a">
       <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-text u-text-1">Список пользователей</h1>
-        <div class="u-clearfix u-group-elements u-group-elements-1">
+        <div> @*class="u-clearfix u-group-elements u-group-elements-1"*@
 
-            <a href="https://nicepage.com/website-templates" class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1">Изменить</a>
-            <a href="https://nicepage.com/website-templates" class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2">Удалить</a>
-            <h2 class="u-text u-text-2">blann23</h2>
+            @if(@Model.Users is not null)
+            {
+                @foreach(User user in @Model.Users)
+                {
+                    <a class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1" style="padding-right:12%" asp-page="/admin/userChange" asp-route-id="@user.Id">Изменить</a>
+                    <a class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2" asp-page="/admin/userBan" asp-route-id="@user.Id">Заблокировать</a>
+                    <h3 class="u-text u-text-2">(@user.Id) @user.Name
+                    @if(!AccessChecker.BanCheck(user.BanDate) && user.BanDate is not null)
+                    {
+                        DateTime dt = DateTime.Parse(user.BanDate);
+                        <text>
+                            <small style="font-size:12px; color:red">(блокировка до @dt.ToShortDateString())</small>
+                        </text>
+                    }
+                    </h3>
+                }
+            }
 
         </div>
       </div>

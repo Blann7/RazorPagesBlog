@@ -1,0 +1,25 @@
+﻿@page "{id}"
+@model BlogPhone.Pages.admin.userBanModel
+@{
+    ViewData["Title"] = "user ban";
+}
+
+<form method="post" asp-antiforgery="true">
+    <label>Id</label>
+    <input type="number" style="margin:5px" required name="id" disabled value="@Model.SiteUser!.Id" />
+    <br />
+
+    <label>Name</label>
+    <input type="text" style="margin:5px" required name="name" disabled value="@Model.SiteUser!.Name" />
+    <br />
+
+    <label>Email</label>
+    <input type="email" style="margin:5px" required name="email" disabled value="@Model.SiteUser!.Email" />
+    <br />
+
+    <label>UnBan Date</label>
+    <input type="datetime-local" style="margin:5px" name="banDate" required />
+    <br />
+
+    <button type="submit">Установить блокировку</button>
+</form>

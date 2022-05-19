@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BlogPhone.Pages;
 
 namespace BlogPhone.Models
 {

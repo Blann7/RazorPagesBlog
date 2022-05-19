@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogPhone.Pages
 {
@@ -21,8 +22,20 @@ namespace BlogPhone.Pages
             context = db;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            // ban check
+            string? userId = HttpContext.User.FindFirst("Id")?.Value;
+
+            User? user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user is not null)
+            {
+                bool banned = AccessChecker.BanCheck(user.BanDate);
+                if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
+            }
+            // ---------
+
             return Page();
         }
 

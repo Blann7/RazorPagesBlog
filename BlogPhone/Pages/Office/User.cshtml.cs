@@ -24,6 +24,11 @@ namespace BlogPhone.Pages.Office
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
             if(SiteUser is null) return RedirectToPage("/Auth/Login");
 
+            // ban check
+            bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
+            if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
+            // ---------
+
             return Page();
         }
     }

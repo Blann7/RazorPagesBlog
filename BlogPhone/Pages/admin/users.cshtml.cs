@@ -23,7 +23,7 @@ namespace BlogPhone.Pages.admin
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
 
-            bool access = AccessChecker.Check(SiteUser?.Role, "admin"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
             if (!access) return RedirectToPage("/auth/logout");
 
             Users = await context.Users.AsNoTracking().ToListAsync();

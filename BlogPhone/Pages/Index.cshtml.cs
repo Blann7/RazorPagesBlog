@@ -30,6 +30,11 @@ namespace BlogPhone.Pages
                 SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
                 if(SiteUser is null) return RedirectToPage("/auth/logout");
 
+                // ban check
+                bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
+                if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
+                // ---------
+
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
             }
 
@@ -40,7 +45,6 @@ namespace BlogPhone.Pages
         {
             if (imageData is null) throw new Exception("DB FAILURE Index page");
 
-            // Конвертируем 
             string imreBase64Data = Convert.ToBase64String(imageData);
             string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
 

@@ -24,7 +24,7 @@ namespace BlogPhone.Pages.Admin
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
 
-            bool access = AccessChecker.Check(SiteUser?.Role, "admin", "moder"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin", "moder"); // step 2 check role
             if (!access) return RedirectToPage("/auth/logout");
 
             /* 
