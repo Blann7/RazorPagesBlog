@@ -24,14 +24,53 @@
     <input type="email" style="margin:5px" required name="email" value="@Model.SiteUser!.Email" />
     <br />
 
-    <label>Выберите новую роль (сейчас @Model.SiteUser!.Role)</label>
+    <label>Money</label>
+    <input type="number" style="margin:5px" required name="money" value="@Model.SiteUser!.Money" />
+    <br />
+
+    <label>Role</label>
     <select style="margin:5px" name="role" required>
-        <option value="user">user</option>
-        <option value="standart">standart</option>
-        <option value="moder">moder</option>
-        <option value="admin">admin</option>
+        @if (@Model.SiteUser!.Role == "user") 
+        { 
+            <option selected value="user">user</option> 
+        }
+        else 
+        { 
+            <option value="user">user</option> 
+        }
+        @if (@Model.SiteUser!.Role == "standart") 
+        { 
+            <option selected value="standart">standart</option> 
+        }
+        else 
+        { 
+            <option value="standart">standart</option> 
+        }
+        @if (@Model.SiteUser!.Role == "moder") 
+        { 
+            <option selected value="moder">moder</option> 
+        }
+        else 
+        { 
+            <option value="moder">moder</option> 
+        }
+        @if (@Model.SiteUser!.Role == "admin") 
+        { 
+            <option selected value="admin">admin</option> 
+        }
+        else 
+        { 
+            <option value="admin">admin</option> 
+        }
     </select>
     <br />
+
+   @if(!@AccessChecker.BanCheck(@Model.SiteUser!.BanDate))
+    {
+        <p>
+            <a asp-page="userChange" asp-page-handler="Unban" style="color:indianred">Разблокировать аккаунт</a>
+        </p>
+    }
 
     <button type="submit">Сохранить</button>
 </form>

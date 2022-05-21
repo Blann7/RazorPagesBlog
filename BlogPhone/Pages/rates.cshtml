@@ -1,0 +1,162 @@
+﻿@page
+@model BlogPhone.Pages.RatesModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Тарифы пользования, 0₽, 499₽, 999₽, 1299₽">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>Тарифы</title>
+    <link rel="stylesheet" href="~/css/nicepage.css" media="screen">
+    <link rel="stylesheet" href="~/css/tariffs.css" media="screen">
+    <script class="u-script" type="text/javascript" src="~/js/jquery.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="~/js/nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 4.10.5, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    
+    
+    <script type="application/ld+json">{
+		"@@context": "http://schema.org",
+		"@@type": "Organization",
+		"name": "",
+		"logo": "images/default-logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Тарифы">
+    <meta property="og:type" content="website">
+  </head>
+  <body class="u-body u-xl-mode"><header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <a asp-page="/index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
+          <img src="~/images/default-logo.png" class="u-logo-image u-logo-image-1">
+        </a>
+        <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
+          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+              <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
+              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+</g></svg>
+            </a>
+          </div>
+          <div class="u-custom-menu u-nav-container">
+            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/aboutUs">О нас</a>
+</li>
+
+@if(Model.IsAuthorize)
+{
+    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/office/user">@Model.SiteUser!.Email</a>
+        <div class="u-nav-popup">
+            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
+                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/logout">Выход</a></li>
+            </ul>
+        </div>
+    </li>   
+}
+else
+{
+    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/auth/login">Вход</a>
+        <div class="u-nav-popup">
+            <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
+                <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/register">Регистрация</a></li>
+            </ul>
+        </div>
+    </li>   
+}
+
+
+</ul>
+          </div>
+          <div class="u-custom-menu u-nav-container-collapse">
+            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+              <div class="u-inner-container-layout u-sidenav-overflow">
+                <div class="u-menu-close"></div>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/index">Главное</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/rates">Тарифы</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/aboutUs">О нас</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/register">Регистрация</a>
+</li></ul>
+</div>
+</li></ul>
+              </div>
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          </div>
+        </nav>
+      </div></header>
+    <section class="u-align-center u-clearfix u-white u-section-1" id="carousel_6dce">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h1 class="u-custom-font u-heading-font u-text u-text-default-lg u-text-default-md u-text-default-sm u-text-default-xl u-text-1" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">Тарифы пользования</h1>
+        <p class="u-text u-text-2">Выберите желаемый тариф</p>
+        @if(Model.IsAuthorize)
+        {
+            <h4 class="u-text u-text-palette-4-dark-1 u-text-3">
+                <span class="u-text-black">Ваш тариф: </span>
+                <span class="u-text-palette-3-dark-1">@Model.SiteUser!.Role</span>
+            </h4>   
+        }
+            <div class="u-clearfix u-gutter-16 u-layout-custom-sm u-layout-custom-xs u-layout-wrap u-layout-wrap-1">
+          <div class="u-gutter-0 u-layout">
+            <div class="u-layout-row">
+              <div class="u-align-center u-container-style u-layout-cell u-left-cell u-palette-1-light-2 u-radius-20 u-shape-round u-size-15-lg u-size-15-xl u-size-30-md u-size-30-sm u-size-60-xs u-layout-cell-1" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
+                <div class="u-container-layout u-valign-top u-container-layout-1">
+                  <h5 class="u-text u-text-default u-text-palette-1-dark-1 u-text-4">User</h5>
+                  <h2 class="u-text u-text-default u-text-palette-1-dark-1 u-text-5">0₽</h2>
+                  <p class="u-text u-text-default u-text-palette-1-dark-1 u-text-6">/МЕСЯЦ</p>
+                  <div class="u-border-2 u-border-white u-line u-line-horizontal u-line-1"></div>
+                  <p class="u-text u-text-palette-1-dark-2 u-text-7">Без чата<br>Без поддержки<br>Без базы данных<br>Без прав управления
+                  </p>
+                  <a href="https://nicepage.com/k/aesthetic-website-templates" class="u-active-palette-1-light-3 u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-radius-50 u-text-palette-3-dark-1 u-white u-btn-1" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">Выбрать</a>
+                </div>
+              </div>
+              <div class="u-align-center u-container-style u-layout-cell u-palette-1-light-2 u-radius-20 u-shape-round u-size-15-lg u-size-15-xl u-size-30-md u-size-30-sm u-size-60-xs u-layout-cell-2" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
+                <div class="u-container-layout u-valign-top u-container-layout-2">
+                  <h5 class="u-text u-text-default u-text-palette-1-dark-1 u-text-8">Standart</h5>
+                  <h2 class="u-text u-text-default u-text-palette-1-dark-1 u-text-9">499₽</h2>
+                  <p class="u-text u-text-default u-text-palette-1-dark-1 u-text-10"> /МЕСЯЦ</p>
+                  <div class="u-border-2 u-border-white u-line u-line-horizontal u-line-2"></div>
+                  <p class="u-text u-text-palette-1-dark-2 u-text-11">Есть общий чат<br>Без поддержки&nbsp;<br>Есть базы данных<br>Без прав упраления
+                  </p>
+                  <a href="https://nicepage.com/k/consulting-website-templates" class="u-active-palette-1-light-3 u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-radius-50 u-text-palette-3-dark-1 u-white u-btn-2" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">выбрать</a>
+                </div>
+              </div>
+              <div class="u-align-center u-container-style u-gradient u-layout-cell u-size-15-lg u-size-15-xl u-size-30-md u-size-30-sm u-size-60-xs u-layout-cell-3">
+                <div class="u-container-layout u-valign-top u-container-layout-3">
+                  <h5 class="u-text u-text-default u-text-palette-3-dark-1 u-text-12">Moder</h5>
+                  <h2 class="u-text u-text-default u-text-palette-3-dark-1 u-text-13">999₽</h2>
+                  <p class="u-text u-text-default u-text-palette-3-dark-1 u-text-14"> /МЕСЯЦ</p>
+                  <div class="u-border-2 u-border-white u-line u-line-horizontal u-line-3"></div>
+                  <p class="u-text u-text-palette-1-dark-2 u-text-15"> Есть общий чат<br>Есть поддержка<br>Есть базы данных<br>Модератор
+                  </p>
+                  <a href="https://nicepage.com/wordpress-themes" class="u-active-palette-1-light-3 u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-radius-50 u-text-palette-3-dark-1 u-white u-btn-3"> Выбрать</a>
+                </div>
+              </div>
+              <div class="u-align-center u-container-style u-layout-cell u-palette-1-light-2 u-radius-20 u-right-cell u-shape-round u-size-15-lg u-size-15-xl u-size-30-md u-size-30-sm u-size-60-xs u-layout-cell-4">
+                <div class="u-container-layout u-valign-top u-container-layout-4">
+                  <h5 class="u-text u-text-default u-text-palette-1-dark-1 u-text-16">Admin</h5>
+                  <h2 class="u-text u-text-default u-text-palette-1-dark-1 u-text-17">1299₽</h2>
+                  <p class="u-text u-text-default u-text-palette-1-dark-1 u-text-18"> /МЕСЯЦ</p>
+                  <div class="u-border-2 u-border-white u-line u-line-horizontal u-line-4"></div>
+                  <p class="u-text u-text-palette-1-dark-2 u-text-19"> Есть общий чат<br>Есть поддержка<br>Есть базы данных<br>Администратор
+                  </p>
+                  <a href="https://nicepage.com/static-site-generator" class="u-active-palette-1-light-3 u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-radius-50 u-text-palette-3-dark-1 u-white u-btn-4" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction=""> Выбрать</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-83d7"><div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">copyright 2022</p>
+      </div></footer>
+  </body>
+</html>

@@ -15,9 +15,21 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            SiteUser = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
+            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == id);
             if(SiteUser is null) return NotFound();
             return Page();
+        }
+        public async Task<IActionResult> OnGetUnbanAsync(string id)
+        {
+            SiteUser = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
+            if (SiteUser is null) return NotFound();
+
+            SiteUser.BanDate = DateTime.UtcNow.ToString();
+
+            context.Users.Update(SiteUser);
+            await context.SaveChangesAsync();
+
+            return RedirectToPage();
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -29,6 +41,7 @@ namespace BlogPhone.Pages.admin
             oldUser.Name = SiteUser.Name;
             oldUser.Password = SiteUser.Password;
             oldUser.Email = SiteUser.Email;
+            oldUser.Money = SiteUser.Money;
             oldUser.Role = SiteUser.Role;
             oldUser.BanDate = SiteUser.BanDate;
 

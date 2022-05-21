@@ -76,26 +76,37 @@
     <section class="u-clearfix u-section-1" id="sec-f51a">
       <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-text u-text-1">Список пользователей</h1>
+        <br /><hr /><br />
         <div>
 
+            <div style="align-content:center; justify-content:center">
+                <form method="post" asp-antiforgery="true">
+                    <input type="number" required name="userId" /> 
+                    <button type="submit">Найти</button>
+                </form>
+            </div>
+
             @if(@Model.Users is not null)
-            {
-                @foreach(User user in @Model.Users)
+            {   
+                for(int i = 0; i < Model.Users.Count; i++)
                 {
+                    User user = Model.Users[i];
+
                     <a class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1" style="padding-right:12%" asp-page="/admin/userChange" asp-route-id="@user.Id">Изменить</a>
                     <a class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2" asp-page="/admin/userBan" asp-route-id="@user.Id">Заблокировать</a>
                     <h3 class="u-text u-text-2">(@user.Id) @user.Name
-                    @if(!AccessChecker.BanCheck(user.BanDate) && user.BanDate is not null)
-                    {
-                        DateTime dt = DateTime.Parse(user.BanDate);
-                        <text>
+                        @if (!AccessChecker.BanCheck(user.BanDate) && user.BanDate is not null)
+                        {
+                            DateTime dt = DateTime.Parse(user.BanDate);
                             <small style="font-size:12px; color:red">(блокировка до @dt.ToShortDateString())</small>
-                        </text>
-                    }
-                    </h3>
+                        }
+                    </h3><br />
+                }
+                if(Model.Users.Count == 0)
+                {
+                    <h1>Не найдено.</h1>   
                 }
             }
-
         </div>
       </div>
     </section>

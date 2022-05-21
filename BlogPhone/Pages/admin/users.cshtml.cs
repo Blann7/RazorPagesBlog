@@ -12,6 +12,7 @@ namespace BlogPhone.Pages.admin
         ApplicationContext context;
         public List<User>? Users { get; set; }
         public User? SiteUser { get; set; }
+        [BindProperty] public string? UserId { get; set; }
         public usersModel(ApplicationContext db)
         {
             context = db;
@@ -26,7 +27,18 @@ namespace BlogPhone.Pages.admin
             bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
             if (!access) return RedirectToPage("/auth/logout");
 
-            Users = await context.Users.AsNoTracking().ToListAsync();
+            Users = await context.Users.AsNoTracking().Where(u => u.Id < 16).ToListAsync();
+
+            return Page();
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return RedirectToPage("/auth/logout");
+
+            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+
+            Users = await context.Users.AsNoTracking().Where(u => u.Id.ToString() == UserId).ToListAsync();
 
             return Page();
         }

@@ -6,6 +6,12 @@
     public static class AccessChecker
     {
         public const string EMAIL = "BobAdmin@mail.ru";
+        /// <summary>
+        /// Returns true if user have at least 1 allowedRole
+        /// </summary>
+        /// <param name="userRole"></param>
+        /// <param name="allowedRoles"></param>
+        /// <returns></returns>
         public static bool RoleCheck(in string? userRole, params string[] allowedRoles)
         {
             if (userRole is null) return false;
@@ -18,6 +24,11 @@
 
             return false;
         }
+        /// <summary>
+        /// Returns FALSE when user banned, Time sync with UTC
+        /// </summary>
+        /// <param name="userBanDate"></param>
+        /// <returns></returns>
         public static bool BanCheck(in string? userBanDate)
         {
             if(userBanDate is null) return true;
