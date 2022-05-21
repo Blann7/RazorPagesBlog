@@ -1,5 +1,5 @@
-﻿@page
-@model BlogPhone.Pages.Admin.PanelModel
+﻿@page "{id?}"
+@model BlogPhone.Pages.admin.articlesModel
 @{
     Layout = null;
 }
@@ -9,12 +9,12 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Список пользователей">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
-    <title>Админ-панель</title>
+    <title>Список статей</title>
     <link rel="stylesheet" href="~/css/nicepage.css" media="screen">
-<link rel="stylesheet" href="~/css/adminpanel.css" media="screen">
+    <link rel="stylesheet" href="~/css/list.css" media="screen">
     <script class="u-script" type="text/javascript" src="~/js/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="~/js/nicepage.js" defer=""></script>
     <meta name="generator" content="Nicepage 4.10.5, nicepage.com">
@@ -28,11 +28,11 @@
 		"logo": "images/default-logo.png"
 }</script>
     <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="adminpanel">
+    <meta property="og:title" content="Страница 1">
     <meta property="og:type" content="website">
   </head>
-  <body class="u-body u-xl-mode"><header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <a asp-page="/index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
+  <body class="u-body u-xl-mode"> <header class="u-clearfix u-header u-header" id="sec-3687"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <a asp-for="/index" class="u-image u-logo u-image-1" data-image-width="80" data-image-height="40">
           <img src="~/images/default-logo.png" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
@@ -47,18 +47,12 @@
             <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/index">Главное</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/rates">Тарифы</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/aboutUs">О нас</a>
-</li>
-
-<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/office/user">@Model.SiteUser!.Email</a>
-    <div class="u-nav-popup">
-        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
-            <li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/logout">Выход</a></li>
-        </ul>
-    </div>
-</li>   
-
-
-</ul>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/admin/panel">Панель</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/admin/addArticle">Добавить статью</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" style="padding: 10px 20px;" asp-page="/office/user">@Model.SiteUser!.Email</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link u-white" asp-page="/auth/logout">Выход</a>
+</li></ul>
+</div>
+</li></ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
@@ -67,7 +61,9 @@
                 <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/index">Главное</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/rates">Тарифы</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/aboutUs">О нас</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/login">Вход</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/register">Регистрация</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/admin/panel">Панель</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/admin/addArticle">Добавить статью</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/office/user">@Model.SiteUser!.Email</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" asp-page="/auth/logout">Выход</a>
 </li></ul>
 </div>
 </li></ul>
@@ -76,29 +72,25 @@
             <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
           </div>
         </nav>
-      </div></header>
-    <section class="u-clearfix u-section-1" id="sec-00ec">
-      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <div class="u-list u-list-1">
-          <div class="u-repeater u-repeater-1">
-            <div class="u-border-2 u-border-grey-75 u-container-style u-list-item u-radius-6 u-repeater-item u-shape-round">
-              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-1">
-                <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-1" asp-page="/admin/articles">Статьи<br>
-                </a>
-              </div>
-            </div>
-            <div class="u-border-2 u-border-grey-75 u-container-style u-list-item u-radius-6 u-repeater-item u-shape-round">
-              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-2">
-                <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-2" asp-page="/admin/users">Пользователи</a>
-              </div>
-            </div>
-            <div class="u-border-2 u-border-grey-75 u-container-style u-list-item u-radius-6 u-repeater-item u-shape-round">
-              <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-3">
-                <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-3" asp-page="/admin/heads">Руководители<br>
-                </a>
-              </div>
-            </div>
-          </div>
+      </div>
+    </header>
+
+    <section class="u-clearfix u-section-1" id="sec-f51a">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h1 class="u-text u-text-1">Список пользователей</h1>
+        <div>
+
+            @if(@Model.Articles is not null)
+            {
+                @foreach(ArticleBlog art in @Model.Articles)
+                {
+                    <a class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1" style="padding-right:5%" asp-page="/admin/articleChange" asp-route-id="@art.Id">Изменить</a>
+                    <a class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2" asp-page="/admin/articles" asp-route-id="@art.Id">Удалить</a>
+                    <h3 class="u-text u-text-2">(ID - @art.Id) @art.Label</h3>
+                    <img style="height:200px; width:200px" src="@ImageWorking.GetImageURLFromBytesArray(art.ImageData)" />
+                }
+            }
+
         </div>
       </div>
     </section>

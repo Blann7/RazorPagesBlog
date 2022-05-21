@@ -26,6 +26,7 @@ namespace BlogPhone.Pages.admin
             if(user is null) return NotFound();
 
             user.BanDate = SiteUser.BanDate;
+            user.Role = "user"; // reset role to user
 
             context.Users.Update(user);
             await context.SaveChangesAsync();

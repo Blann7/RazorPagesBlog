@@ -9,11 +9,11 @@
 <form method="post" asp-antiforgery="true" enctype="multipart/form-data">
 
     <h3>Название статьи</h3>
-    <textarea asp-for="Label" type="text" required cols=100 rows=2></textarea>
+    <textarea asp-for="Label" name="label" type="text" required cols=100 rows=2></textarea>
     <br>
 
     <h3>Текст статьи</h3>
-    <textarea asp-for="AricleText" type="text" required cols=100 rows=20></textarea>
+    <textarea asp-for="ArticleText" name="articleText" type="text" required cols=100 rows=20></textarea>
 
     <br>
 
@@ -25,5 +25,3 @@
 
     <input type="submit" value="Создать" />
 </form>
-
-<h1>@Model.Message</h1>

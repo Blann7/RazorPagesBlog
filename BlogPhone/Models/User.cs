@@ -8,6 +8,7 @@
         public string? Email { get; set; }
         public string? Role { get; set; }
         public string? BanDate { get; set; }
+        public int Money { get; set; } = 0;
 
         public User()
         { }

@@ -34,19 +34,5 @@ namespace BlogPhone.Pages
             
             return Page();
         }
-
-        public string GetImageURLFromBytesArray(byte[]? imageData)
-        {
-            if (imageData is null) throw new Exception("DB FAILURE article view page");
-
-            //FileContentResult image = new FileContentResult(imageData, "image/jpeg");
-            //return image;
-
-            // Конвертируем 
-            string imreBase64Data = Convert.ToBase64String(imageData);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-
-            return imgDataURL;
-        }
     }
 }

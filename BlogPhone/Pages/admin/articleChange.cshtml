@@ -1,0 +1,29 @@
+﻿@page "{id}"
+@model BlogPhone.Pages.admin.articlesChangeModel
+@{
+    ViewData["Title"] = "Изменение статьи";
+}
+
+<h1>Изменение статьи</h1>
+
+<form method="post" asp-antiforgery="true" enctype="multipart/form-data">
+
+    <h3>Название статьи</h3>
+    <textarea type="text" name="label" required cols=100 rows=2>@Model.Article.Label</textarea>
+    <br>
+
+    <h3>Текст статьи</h3>
+    <textarea type="text" name="articleText" required cols=100 rows=20>@Model.Article.ArticleText</textarea>
+
+    <br>
+
+    <h3>Фото к статье</h3>
+    <input type="file" name="image" />
+
+    <img style="height:500px; width:500px" src="@ImageWorking.GetImageURLFromBytesArray(@Model.Article.ImageData)" />
+
+    <br> <br>
+
+    <input type="submit" value="Создать" />
+</form>
+
