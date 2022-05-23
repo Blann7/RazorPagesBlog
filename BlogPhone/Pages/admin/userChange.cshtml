@@ -2,6 +2,7 @@
 @model BlogPhone.Pages.admin.userChangeModel
 @{
     ViewData["Title"] = "Изменить пользователя";
+    ViewBag.Email = @Model.AdminEmail;
 }
 
 <h1>Изменение личного кабинета пользователя</h1>

@@ -105,7 +105,7 @@ else
             <div class="u-blog-post u-container-style u-repeater-item">
                 <div class="u-container-layout u-similar-container u-valign-bottom-xs u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-container-layout-1">
                 <a class="u-post-header-link" asp-page="/articles/view" asp-route-id="@articleblog.Id"><!--blog_post_image-->
-                    <img src="@Model.GetImageURLFromBytesArray(articleblog.ImageData)" alt="blog's picture" class="u-blog-control u-image u-image-default u-image-1"><!--/blog_post_image-->
+                    <img src="@ImageWorking.GetImageURLFromBytesArray(articleblog.ImageData)" alt="blog's picture" class="u-blog-control u-image u-image-default u-image-1"><!--/blog_post_image-->
                 </a>
 
                 <!--blog_post_header-->

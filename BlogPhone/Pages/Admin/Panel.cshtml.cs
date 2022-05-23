@@ -22,9 +22,12 @@ namespace BlogPhone.Pages.Admin
             string? idString = HttpContext.User.FindFirst("Id")?.Value;
             if (idString is null) return RedirectToPage("/Auth/Logout");
 
-            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Role = u.Role, Email = u.Email })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if(SiteUser is null) return RedirectToPage("/Auth/Logout");
 
-            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin", "moder"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser.Role, "admin", "moder"); // step 2 check role
             if (!access) return RedirectToPage("/auth/logout");
 
             /* 

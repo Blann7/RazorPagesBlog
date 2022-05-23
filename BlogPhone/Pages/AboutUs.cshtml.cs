@@ -22,7 +22,9 @@ namespace BlogPhone.Pages
                 if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/auth/logout");
                 int Id = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
 
-                SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
+                SiteUser = await context.Users.AsNoTracking()
+                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate })
+                    .FirstOrDefaultAsync(u => u.Id == Id);
                 if (SiteUser is null) return RedirectToPage("/auth/logout");
 
                 // ban check

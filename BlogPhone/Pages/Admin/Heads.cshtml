@@ -80,7 +80,7 @@
             <label asp-for="UserId">Введите ID пользователя:</label>
             <input type="number" id="uId" name="UserId" required asp-for="UserId" />
 
-            <label asp-for="UserRole">Выберите новую роль</label>
+            <label asp-for="UserRole">Выберите новую роль (она будет выдана навечно)</label>
             <select name="UserRole" required asp-for="UserRole">
                 <option value="user">user</option>
                 <option value="standart">standart</option>
@@ -96,9 +96,10 @@
         <table style="align-content:center">
             @foreach(User? user in @Model.HighRoleUsers.ToList())
             {
+                DateTime dt = DateTime.Parse(user.RoleValidityDate!);
                 <tr>
                     <th>
-                       (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role
+                       (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToShortDateString())
                     </th>
                     <th>
                         || <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a>

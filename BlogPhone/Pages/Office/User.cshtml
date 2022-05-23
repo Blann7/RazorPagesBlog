@@ -9,6 +9,11 @@
     <h3 style="text-align:center">Имя: @Model.SiteUser!.Name</h3>
     <h3 style="text-align:center; color:limegreen">Счёт: @Model.SiteUser!.Money рублей</h3>
     <h3 style="text-align:center; color:gray">Статус: @Model.SiteUser!.Role</h3>
+    @if(@Model.SiteUser!.Role != "user")
+    {
+        DateTime dt = DateTime.Parse(Model.SiteUser.RoleValidityDate!);
+        <text> <h3 style="text-align:center; color:gray">Истекает: @dt.ToLocalTime()</h3> </text>
+    }
     <h3 style="text-align:center">Почта: @Model.SiteUser!.Email</h3>
     <h3 style="text-align:center">Пароль: @Model.SiteUser!.Password</h3>
 

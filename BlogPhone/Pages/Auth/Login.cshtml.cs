@@ -30,28 +30,26 @@ namespace BlogPhone.Pages.Auth
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
             if (user is null) return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
+            if (string.IsNullOrEmpty(user.Role)) return BadRequest();
 
             List<Claim> claims = new List<Claim> {
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.ToString() ?? "undefined")
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+            AuthenticationProperties authenticationProperties = new();
             if (UserSaveMe)
-            {
-                await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { IsPersistent = true, AllowRefresh = true });
-            }
+                authenticationProperties = new AuthenticationProperties { IsPersistent = true, AllowRefresh = true };
             else
-            {
-                await HttpContext.SignInAsync(
+                authenticationProperties = new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10), 
+                                                                            AllowRefresh = true };
+
+            await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2), AllowRefresh = true });
-            }
+                authenticationProperties);
 
             return RedirectToPage(returnUrl ?? "/index");
         }

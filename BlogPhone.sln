@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPhone", "BlogPhone\BlogPhone.csproj", "{40AA1738-A984-4894-8ED6-0541AA998F99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateChecker", "ValidateChecker\ValidateChecker.csproj", "{033B5213-427C-4438-8714-4CC5134BE6D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{40AA1738-A984-4894-8ED6-0541AA998F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40AA1738-A984-4894-8ED6-0541AA998F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40AA1738-A984-4894-8ED6-0541AA998F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{033B5213-427C-4438-8714-4CC5134BE6D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033B5213-427C-4438-8714-4CC5134BE6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033B5213-427C-4438-8714-4CC5134BE6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033B5213-427C-4438-8714-4CC5134BE6D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

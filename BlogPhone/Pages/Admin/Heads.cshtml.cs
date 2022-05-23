@@ -19,19 +19,25 @@ namespace BlogPhone.Pages.Admin
         {
             context = db;
         }
-        public async Task OnGetAsync(string? id) // id is not null in case of delete selected account
+        public async Task<IActionResult> OnGetAsync(string? id) // id is not null in case of delete selected account
         {
             string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) RedirectToPage("/auth/logout");
+            if (idString is null) return RedirectToPage("/auth/logout");
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Role = u.Role, Email = u.Email })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
 
             bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
             if (!access) RedirectToPage("/auth/logout");
 
-            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (id is not null) await SetUserRole(id); // if "снять с поста" button pressed
 
-            if (id is not null) await SetUserRole(id);
+            HighRoleUsers = await context.Users
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityDate = u.RoleValidityDate })
+                .Where(u => u.Role != "user").ToListAsync();
 
-            HighRoleUsers = await context.Users.Where(u => u.Role != "user").ToListAsync();
+            return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -42,9 +48,11 @@ namespace BlogPhone.Pages.Admin
                 return RedirectToPage("/admin/heads");
             }
 
-            Message = $"Успешно! || {user.Name}: {user.Role} => {UserRole}";
+            Message = $"Вечная роль выдана! || {user.Name}: {user.Role} => {UserRole}";
             user.Role = UserRole;
+            user.RoleValidityDate = DateTime.UtcNow.AddYears(100).ToString();
 
+            context.Users.Update(user);
             await context.SaveChangesAsync();
 
             return RedirectToPage("/admin/heads");
@@ -55,7 +63,10 @@ namespace BlogPhone.Pages.Admin
             if (user is null) return NotFound();
 
             user.Role = "user";
+
+            context.Users.Update(user);
             await context.SaveChangesAsync();
+
             return RedirectToPage("/admin/heads");
         }
     }

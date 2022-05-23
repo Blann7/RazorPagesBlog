@@ -9,12 +9,22 @@ namespace BlogPhone.Pages.admin
     {
         ApplicationContext context;
         [BindProperty] public User? SiteUser { get; set; }
+        public string? AdminEmail { get; set; }
         public userChangeModel(ApplicationContext db)
         {
             context = db;
         }
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (string.IsNullOrEmpty(idString)) return RedirectToPage("/auth/logout");
+
+            User? adminUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Email = u.Email })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (adminUser?.Email is null) return BadRequest();
+            AdminEmail = adminUser.Email;
+
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == id);
             if(SiteUser is null) return NotFound();
             return Page();
@@ -43,6 +53,7 @@ namespace BlogPhone.Pages.admin
             oldUser.Email = SiteUser.Email;
             oldUser.Money = SiteUser.Money;
             oldUser.Role = SiteUser.Role;
+            oldUser.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
             oldUser.BanDate = SiteUser.BanDate;
 
             context.Users.Update(oldUser);

@@ -1,4 +1,50 @@
-﻿@page
+﻿@page "{role}"
 @model BlogPhone.Pages.store.buyRoleModel
 @{
+    ViewData["Title"] = "Подтверждение покупки";
 }
+
+<h1 style="color:coral">Подтвердите покупку!</h1>
+
+<br /><hr /><br />
+
+<h3>Вы покупаете: <br /> 
+    
+    @if(Model.Role == "admin")
+    {
+        <text>
+            <span style="color:red">ADMIN</span>, Цена: <span style="color:red">@AccessChecker.ADMIN_COST</span>
+        </text>
+    }
+    else if(Model.Role == "moder")
+    {
+        <text>
+            <span style="color:orange">MODER</span>, Цена: <span style="color:orange">@AccessChecker.MODER_COST</span>
+        </text>
+    }
+    else if(Model.Role == "standart")
+    {
+        <text>
+            <span style="color:lightseagreen">STANDART</span>, Цена: <span style="color:lightseagreen">@AccessChecker.STANDART_COST</span>
+        </text>
+    }
+    else
+    {
+        <text>
+            <span style="color:darkgray">USER</span>, Цена: <span style="color:darkgray">@AccessChecker.USER_COST</span>
+        </text>
+    }
+</h3>
+
+<br />
+
+<h1 style="color:red">При покупке роли ниже, чем есть сейчас, деньги не возвращаем.</h1>
+
+<br />
+
+<form method="post" asp-antiforgery="true">
+    <button style="color:green; padding:5%">Подтверждаю покупку</button>
+</form>
+<a asp-page="/rates" style="color:gray; margin:2%">Назад</a>
+
+<br /><hr />

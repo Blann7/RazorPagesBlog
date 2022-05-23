@@ -27,8 +27,21 @@ namespace BlogPhone.Pages
                 if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/auth/logout");
                 int Id = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
 
-                SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
+                SiteUser = await context.Users.AsNoTracking()
+                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate })
+                    .FirstOrDefaultAsync(u => u.Id == Id);
                 if(SiteUser is null) return RedirectToPage("/auth/logout");
+
+                //----------
+                //if (SiteUser.Id == 108)
+                //{
+                //    User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == 108);
+                //    if (user is null) return Page();
+                //    user.RoleValidityDate = DateTime.UtcNow.AddMinutes(-5).ToString();
+
+                //    await context.SaveChangesAsync();
+                //}
+                //--------
 
                 // ban check
                 bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
@@ -39,16 +52,6 @@ namespace BlogPhone.Pages
             }
 
             return Page();
-        }
-
-        public string GetImageURLFromBytesArray(byte[]? imageData)
-        {
-            if (imageData is null) throw new Exception("DB FAILURE Index page");
-
-            string imreBase64Data = Convert.ToBase64String(imageData);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-
-            return imgDataURL;
         }
     }
 }
