@@ -44,6 +44,8 @@ namespace ValidateChecker
                     await context.SaveChangesAsync();
                 }
             }
+
+            await context.DisposeAsync();
         }
     }
 }

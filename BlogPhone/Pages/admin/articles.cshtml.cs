@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages.admin
 {
-    [Authorize(Roles = "admin")] // step 1 check role
+    [Authorize(Roles = "admin, moder")] // step 1 check role
     public class articlesModel : PageModel
     {
         ApplicationContext context;
@@ -23,7 +23,7 @@ namespace BlogPhone.Pages.admin
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
 
-            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin", "moder"); // step 2 check role
             if (!access) return RedirectToPage("/auth/logout");
 
             Articles = await context.ArticleBlogs.AsNoTracking().ToListAsync();
