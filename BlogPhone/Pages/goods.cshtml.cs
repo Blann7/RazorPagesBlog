@@ -5,13 +5,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BlogPhone.Pages
 {
-    public class RatesModel : PageModel
+    public class goodsModel : PageModel
     {
         ApplicationContext context;
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
-
-        public RatesModel(ApplicationContext db)
+        public goodsModel(ApplicationContext db)
         {
             context = db;
         }

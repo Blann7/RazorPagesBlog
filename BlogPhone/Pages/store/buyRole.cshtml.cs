@@ -66,7 +66,7 @@ namespace BlogPhone.Pages.store
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToPage("/rates");
+            return RedirectToPage("/goods");
         }
 
         private void SetRoleCost()
