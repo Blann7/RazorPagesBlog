@@ -5,12 +5,12 @@ using BlogPhone.Models;
 
 namespace BlogPhone.Pages
 {
-    public class ArticleViewModel : PageModel
+    public class ViewModel : PageModel
     {
         readonly ApplicationContext context;
         public ArticleBlog? Article { get; set; }
 
-        public ArticleViewModel(ApplicationContext db)
+        public ViewModel(ApplicationContext db)
         {
             context = db;
         }

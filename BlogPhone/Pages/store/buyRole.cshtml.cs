@@ -8,12 +8,12 @@ using System.Text;
 namespace BlogPhone.Pages.store
 {
     [Authorize]
-    public class buyRoleModel : PageModel
+    public class BuyRoleModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public string? Role { get; set; }
         int roleCost;
-        public buyRoleModel(ApplicationContext db)
+        public BuyRoleModel(ApplicationContext db)
         {
             context = db;
         }

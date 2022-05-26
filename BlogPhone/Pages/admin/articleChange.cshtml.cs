@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogPhone.Pages.admin
 {
-    public class articlesChangeModel : PageModel
+    public class ChangeArticleModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public ArticleBlog? Article { get; set; }
         [BindProperty] public string? Label { get; set; }
         [BindProperty] public string? ArticleText { get; set; }
         [BindProperty] public IFormFile? Image { get; set; }
-        public articlesChangeModel(ApplicationContext db)
+        public ChangeArticleModel(ApplicationContext db)
         {
             context = db;
         }

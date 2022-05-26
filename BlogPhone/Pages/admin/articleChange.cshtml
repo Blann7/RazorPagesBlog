@@ -1,5 +1,5 @@
 ﻿@page "{id}"
-@model BlogPhone.Pages.admin.articlesChangeModel
+@model BlogPhone.Pages.admin.ChangeArticleModel
 @{
     ViewData["Title"] = "Изменение статьи";
 }
@@ -9,7 +9,7 @@
 <form method="post" asp-antiforgery="true" enctype="multipart/form-data">
 
     <h3>Название статьи</h3>
-    <textarea type="text" name="label" required cols=100 rows=2>@Model.Article.Label</textarea>
+    <textarea type="text" name="label" required cols=100 rows=2>@Model.Article!.Label</textarea>
     <br>
 
     <h3>Текст статьи</h3>

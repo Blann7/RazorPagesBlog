@@ -5,11 +5,11 @@ using BlogPhone.Models;
 
 namespace BlogPhone.Pages.admin
 {
-    public class userBanModel : PageModel
+    public class BanUserModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         [BindProperty] public User? SiteUser { get; set; }
-        public userBanModel(ApplicationContext db)
+        public BanUserModel(ApplicationContext db)
         {
             context = db;
         }

@@ -17,33 +17,31 @@ namespace BlogPhone.Pages.Auth
         [BindProperty] public bool UserSaveMe { get; set; } = false;
         public bool IsModalShow { get; set; } = false;
         public string Message { get; set; } = "";
-
         public LoginModel(ApplicationContext db)
         {
             context = db;
         }
-
         public void OnGet()
         { }
-
         public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
             if (user is null) return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
             if (string.IsNullOrEmpty(user.Role)) return BadRequest();
 
-            List<Claim> claims = new List<Claim> {
+            List<Claim> claims = new()
+            {
                 new Claim("Id", user.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
             };
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsIdentity claimsIdentity = new (claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             AuthenticationProperties authenticationProperties = new();
             if (UserSaveMe)
                 authenticationProperties = new AuthenticationProperties { IsPersistent = true, AllowRefresh = true };
             else
-                authenticationProperties = new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10), 
+                authenticationProperties = new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1), // 
                                                                             AllowRefresh = true };
 
             await HttpContext.SignInAsync(

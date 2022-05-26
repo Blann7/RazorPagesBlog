@@ -5,7 +5,9 @@ namespace ValidateChecker
     {
         static void Main(string[] args)
         {
-            while(true)
+            int interval = Configuration.Init.GetInterval();
+
+            while (true)
             {
                 Console.WriteLine("Старт итерации проверки");
 
@@ -14,7 +16,7 @@ namespace ValidateChecker
 
                 Console.WriteLine("_______выполнено_______");
 
-                Thread.Sleep(20000); // change
+                Thread.Sleep(interval); // change
             }
         }
     }

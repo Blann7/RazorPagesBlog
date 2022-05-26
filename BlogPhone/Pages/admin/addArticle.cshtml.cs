@@ -7,17 +7,16 @@ using Microsoft.AspNetCore.Authorization;
 namespace BlogPhone.Pages
 {
     [Authorize(Roles = "admin, moder")] // step 1 check roles
-    public class AddArtModel : PageModel
+    public class AddArticleModel : PageModel
     {
         readonly ApplicationContext context;
-
         [BindProperty] public string? Label { get; set; }
         [BindProperty] public string? ArticleText { get; set; }
         [BindProperty] public IFormFile? Image { get; set; }
         public byte[]? ImageData { get; set; }
         public string Message { get; set; } = "";
 
-        public AddArtModel(ApplicationContext db)
+        public AddArticleModel(ApplicationContext db)
         {
             context = db;
         }
@@ -46,7 +45,7 @@ namespace BlogPhone.Pages
 
             if (Label != null && ArticleText != null && ImageData != null)
             {
-                ArticleBlog ab = new ArticleBlog(Label, ArticleText, ImageData);
+                ArticleBlog ab = new (Label, ArticleText, ImageData);
 
                 await context.ArticleBlogs.AddAsync(ab);
                 await context.SaveChangesAsync();

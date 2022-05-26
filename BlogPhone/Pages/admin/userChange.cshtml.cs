@@ -5,12 +5,12 @@ using BlogPhone.Models;
 
 namespace BlogPhone.Pages.admin
 {
-    public class userChangeModel : PageModel
+    public class ChangeUserModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         [BindProperty] public User? SiteUser { get; set; }
         public string? AdminEmail { get; set; }
-        public userChangeModel(ApplicationContext db)
+        public ChangeUserModel(ApplicationContext db)
         {
             context = db;
         }

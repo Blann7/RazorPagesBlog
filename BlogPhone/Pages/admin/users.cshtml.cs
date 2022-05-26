@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Authorization;
 namespace BlogPhone.Pages.admin
 {
     [Authorize(Roles = "admin")] // step 1 check role
-    public class usersModel : PageModel
+    public class UsersModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public List<User>? Users { get; set; }
         public User? SiteUser { get; set; }
         [BindProperty] public string? UserId { get; set; }
-        public usersModel(ApplicationContext db)
+        public UsersModel(ApplicationContext db)
         {
             context = db;
         }
