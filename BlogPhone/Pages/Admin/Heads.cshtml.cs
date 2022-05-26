@@ -9,7 +9,7 @@ namespace BlogPhone.Pages.Admin
     [Authorize(Roles = "admin")] // step 1 check role
     public class HeadsModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public string? Message { get; set; } = "Изменить роль по ID";
         [BindProperty] public int? UserId { get; set; }
         [BindProperty] public string? UserRole { get; set; }

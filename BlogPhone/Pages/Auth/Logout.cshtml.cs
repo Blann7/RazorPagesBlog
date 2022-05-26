@@ -11,7 +11,7 @@ namespace BlogPhone.Pages.Auth
     [Authorize]
     public class LogoutModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public bool Success { get; set; } = false;
         public LogoutModel(ApplicationContext db)
         {

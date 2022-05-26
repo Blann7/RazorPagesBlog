@@ -9,7 +9,7 @@ namespace BlogPhone.Pages.Office
     [Authorize]
     public class UserModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public User? SiteUser { get; set; }
 
         public UserModel(ApplicationContext db)

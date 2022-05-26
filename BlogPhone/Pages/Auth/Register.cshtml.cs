@@ -11,7 +11,7 @@ namespace BlogPhone.Pages
 {
     public class RegisterModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         [BindProperty] public User SiteUser { get; set; } = new();
 
         public RegisterModel(ApplicationContext db)
@@ -44,12 +44,12 @@ namespace BlogPhone.Pages
             User? loginUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
             if(loginUser is null) return RedirectToPage("/auth/login");
 
-            List<Claim> claims = new List<Claim> {
+            List<Claim> claims = new() {
                 new Claim("Id", loginUser.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, loginUser.Role?.ToString() ?? "undefined")
             };
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsIdentity claimsIdentity = new (claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

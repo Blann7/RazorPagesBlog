@@ -9,7 +9,7 @@ namespace BlogPhone.Pages.Admin
     [Authorize(Roles = "admin, moder")] // step 1 check role
     public class PanelModel : PageModel
     {
-        ApplicationContext context;
+        readonly ApplicationContext context;
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
 
