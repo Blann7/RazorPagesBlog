@@ -127,8 +127,20 @@ else
             </div>
             <!--/blog_post-->
             }
-
           </div>
+
+          <div style="align-content:center; justify-content:center">
+            <form method="post" asp-antiforgery="true" asp-page-handler="More">
+                <button type="submit">Показать больше</button>
+            </form>
+            
+            <br />
+
+            <form method="post" asp-antiforgery="true" asp-page-handler="Less">
+                <button type="submit">Скрыть</button>
+            </form>
+        </div>
+
         </div><!--/blog-->
       </div>
     </section>

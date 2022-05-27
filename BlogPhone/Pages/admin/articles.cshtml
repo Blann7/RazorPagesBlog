@@ -77,7 +77,15 @@
 
     <section class="u-clearfix u-section-1" id="sec-f51a">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h1 class="u-text u-text-1">Список пользователей</h1>
+        <h1 class="u-text u-text-1">Список статей</h1>
+
+        <div style="align-content:center; justify-content:center">
+            <form method="post" asp-antiforgery="true">
+                <input type="number" required name="articleId" /> 
+                <button type="submit">Найти</button>
+            </form>
+        </div>
+
         <div>
 
             @if(@Model.Articles is not null)

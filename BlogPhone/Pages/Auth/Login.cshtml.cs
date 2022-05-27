@@ -26,10 +26,11 @@ namespace BlogPhone.Pages.Auth
         public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
-            if (user is null) return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
-            if (string.IsNullOrEmpty(user.Role)) return BadRequest();
+            if (user is null || user.Name != UserName || user.Password != UserPassword) 
+                return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
+            if (user.Role is null) return BadRequest();
 
-            List<Claim> claims = new()
+            List<Claim> claims = new ()
             {
                 new Claim("Id", user.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
@@ -39,10 +40,14 @@ namespace BlogPhone.Pages.Auth
 
             AuthenticationProperties authenticationProperties = new();
             if (UserSaveMe)
-                authenticationProperties = new AuthenticationProperties { IsPersistent = true, AllowRefresh = true };
+                authenticationProperties = new AuthenticationProperties() { IsPersistent = true, AllowRefresh = true };
             else
-                authenticationProperties = new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1), // 
-                                                                            AllowRefresh = true };
+                authenticationProperties = new AuthenticationProperties() 
+                { 
+                    IsPersistent = true, 
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1), 
+                    AllowRefresh = true 
+                };
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,

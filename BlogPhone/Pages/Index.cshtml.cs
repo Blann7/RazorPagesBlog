@@ -16,12 +16,8 @@ namespace BlogPhone.Pages
         {
             context = db;
         }
-
         public async Task<IActionResult> OnGetAsync()
         {
-            Articles = await context.ArticleBlogs.AsNoTracking().ToListAsync();
-            Articles.Reverse();
-
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
                 if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/auth/logout");
@@ -32,18 +28,6 @@ namespace BlogPhone.Pages
                     .FirstOrDefaultAsync(u => u.Id == Id);
                 if(SiteUser is null) return RedirectToPage("/auth/logout");
 
-
-                //----------
-                //if (SiteUser.Id == 108)
-                //{
-                //    User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == 108);
-                //    if (user is null) return Page();
-                //    user.RoleValidityDate = DateTime.UtcNow.AddMinutes(-5).ToString();
-
-                //    await context.SaveChangesAsync();
-                //}
-                //--------
-
                 // ban check
                 bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
                 if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
@@ -52,7 +36,33 @@ namespace BlogPhone.Pages
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
             }
 
+            if (Request.Cookies["indexLoad"] is null)
+            {
+                Response.Cookies.Append("indexLoad", "3");
+                return RedirectToPage("/index");
+            }
+
+            List<ArticleBlog> arts = await context.ArticleBlogs.AsNoTracking().ToListAsync();
+            if (Request.Cookies["indexLoad"] == "all") Articles = arts;
+            else Articles = arts.TakeLast(int.Parse(Request.Cookies["indexLoad"]!)).ToList();
+
             return Page();
         }
+        public IActionResult OnPostMore()
+        {
+            if (Request.Cookies["indexLoad"] == "3") Response.Cookies.Append("indexLoad", "10");
+            else if (Request.Cookies["indexLoad"] == "10") Response.Cookies.Append("indexLoad", "20");
+            else if (Request.Cookies["indexLoad"] == "20") Response.Cookies.Append("indexLoad", "30");
+            else Response.Cookies.Append("indexLoad", "all");
+
+            return RedirectToPage("/index");
+        }
+        public IActionResult OnPostLess()
+        {
+            Response.Cookies.Append("indexLoad", "3");
+
+            return RedirectToPage("/index");
+        }
+
     }
 }
