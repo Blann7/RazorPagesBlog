@@ -14,7 +14,9 @@ namespace BlogPhone.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=database;Trusted_Connection=True");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=u1690754_main;User Id=u1690754_user;Password=LenaGolovach777;");
+            // For RegRu - Server=localhost;Database=u1690754_main;User Id=u1690754_user;Password=LenaGolovach777;
+            // For developing - Server=(localdb)\\mssqllocaldb;Database=database;Trusted_Connection=True
         }
     }
 }
