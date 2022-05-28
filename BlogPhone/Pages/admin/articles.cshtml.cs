@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages.admin
 {
-    [Authorize(Roles = "admin, moder")] // step 1 check role
+    [Authorize]
     public class ArticlesModel : PageModel
     {
         readonly ApplicationContext context;
@@ -19,12 +19,11 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnGetAsync(string? id)
         {
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/auth/logout");
-            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
-            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin", "moder"); // step 2 check role
-            if (!access) return RedirectToPage("/auth/logout");
+            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
+            if (!access) return BadRequest();
 
             if(id is not null) // for remove article
             {
@@ -56,6 +55,22 @@ namespace BlogPhone.Pages.admin
             else Articles = new List<ArticleBlog>() { article };
 
             return Page();
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

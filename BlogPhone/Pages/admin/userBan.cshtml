@@ -6,18 +6,18 @@
 
 <form method="post" asp-antiforgery="true">
     <label>Id</label>
-    <input type="number" style="margin:5px" required name="id" disabled value="@Model.SiteUser!.Id" />
+    <input type="number" style="margin:5px" required name="id" disabled value="@Model.BanUser!.Id" />
     <br />
 
     <label>Name</label>
-    <input type="text" style="margin:5px" required name="name" disabled value="@Model.SiteUser!.Name" />
+    <input type="text" style="margin:5px" required name="name" disabled value="@Model.BanUser!.Name" />
     <br />
 
     <label>Email</label>
-    <input type="email" style="margin:5px" required name="email" disabled value="@Model.SiteUser!.Email" />
+    <input type="email" style="margin:5px" required name="email" disabled value="@Model.BanUser!.Email" />
     <br />
 
-    <label>UnBan Date</label>
+    <label>Unban Date</label>
     <input type="date" style="margin:5px" name="banDate" required />
     <br />
 

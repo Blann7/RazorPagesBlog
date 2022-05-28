@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogPhone.Pages.Admin
 {
-    [Authorize(Roles = "admin")] // step 1 check role
+    [Authorize] 
     public class HeadsModel : PageModel
     {
         readonly ApplicationContext context;
@@ -21,15 +21,11 @@ namespace BlogPhone.Pages.Admin
         }
         public async Task<IActionResult> OnGetAsync(string? id) // id is not null in case of delete selected account
         {
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/auth/logout");
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
-            SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Role = u.Role, Email = u.Email })
-                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
-
-            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin"); // step 2 check role
-            if (!access) RedirectToPage("/auth/logout");
+            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin");
+            if (!access) return BadRequest();
 
             if (id is not null) await SetUserRole(id); // if "снять с поста" button pressed
 
@@ -68,6 +64,22 @@ namespace BlogPhone.Pages.Admin
             await context.SaveChangesAsync();
 
             return RedirectToPage("/admin/heads");
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

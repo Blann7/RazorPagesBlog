@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages
 {
-    [Authorize(Roles = "admin, moder")] // step 1 check roles
+    [Authorize]
     public class AddArticleModel : PageModel
     {
         readonly ApplicationContext context;
         [BindProperty] public string? Label { get; set; }
         [BindProperty] public string? ArticleText { get; set; }
         [BindProperty] public IFormFile? Image { get; set; }
+        public User? SiteUser { get; set; }
         public byte[]? ImageData { get; set; }
         public string Message { get; set; } = "";
 
@@ -23,12 +24,10 @@ namespace BlogPhone.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/Auth/Logout");
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
-            User? SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
-
-            bool access = AccessChecker.RoleCheck(SiteUser?.Role, "admin", "moder"); // step 2 check role
+            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
             if (!access) return RedirectToPage("/auth/logout");
 
             return Page();
@@ -53,6 +52,25 @@ namespace BlogPhone.Pages
                 return RedirectToPage("/admin/articles");
             }
             else return BadRequest();
+        }
+
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            ViewData["email"] = SiteUser.Email;
+
+            return (true, true);
         }
     }
 }

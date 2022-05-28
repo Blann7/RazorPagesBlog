@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPhone.Pages.Admin
 {
-    [Authorize(Roles = "admin, moder")] // step 1 check role
+    [Authorize]
     public class PanelModel : PageModel
     {
         readonly ApplicationContext context;
@@ -19,24 +19,29 @@ namespace BlogPhone.Pages.Admin
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/Auth/Logout");
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
-            SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Role = u.Role, Email = u.Email })
-                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
-            if(SiteUser is null) return RedirectToPage("/Auth/Logout");
-
-            bool access = AccessChecker.RoleCheck(SiteUser.Role, "admin", "moder"); // step 2 check role
-            if (!access) return RedirectToPage("/auth/logout");
-
-            /* 
-             * if step 1 check is ok, but step 2 check is not ok -
-             * we redirecting user to logout page.
-             * It is to avoid using of panel by demoted admins/moders
-             */
+            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
+            if (!access) return BadRequest();
 
             return Page();
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

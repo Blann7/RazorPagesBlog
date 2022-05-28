@@ -42,20 +42,5 @@
             
             return true;
         }
-        /// <summary>
-        /// Returns TRUE if role is valid now
-        /// </summary>
-        /// <param name="userRoleValidityDate"></param>
-        /// <returns></returns>
-        public static bool RoleValidityCheck(in string? userRole, in string? userRoleValidityDate)
-        {
-            if (userRole is null || userRoleValidityDate is null) return false;
-            if (userRole == "user") return true; // user should not check
-
-            DateTime validDate = DateTime.Parse(userRoleValidityDate);
-            if (DateTime.UtcNow < validDate) return true;
-
-            return false;
-        }
     }
 }

@@ -32,8 +32,7 @@ namespace BlogPhone.Pages.Auth
 
             List<Claim> claims = new ()
             {
-                new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                new Claim("Id", user.Id.ToString())
             };
 
             ClaimsIdentity claimsIdentity = new (claims, CookieAuthenticationDefaults.AuthenticationScheme);
