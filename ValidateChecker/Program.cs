@@ -1,5 +1,4 @@
-﻿
-namespace ValidateChecker
+﻿namespace ValidateChecker
 {
     class Program
     {

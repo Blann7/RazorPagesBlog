@@ -92,21 +92,23 @@
 
         <hr />
 
-        <h1>Руководители:</h1>
-        <table style="align-content:center">
-            @foreach(User? user in @Model.HighRoleUsers.ToList())
-            {
-                DateTime dt = DateTime.Parse(user.RoleValidityDate!);
-                <tr>
-                    <th>
-                       (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToShortDateString())
-                    </th>
-                    <th>
-                        || <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a>
-                    </th>
-                </tr>
-            }
-        </table>
+        <div style="align-content:center; text-align:center; justify-content:center">
+            <h1>Руководители:</h1>
+            <table style="align-content:center">
+                @foreach(User? user in @Model.HighRoleUsers.ToList())
+                {
+                    DateTime dt = DateTime.Parse(user.RoleValidityDate!);
+                    <tr>
+                        <th>
+                           (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToShortDateString())
+                        </th>
+                        <th>
+                            || <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a>
+                        </th>
+                    </tr>
+                }
+            </table>
+        </div>
     </section>
     
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-83d7"><div class="u-clearfix u-sheet u-sheet-1">
