@@ -53,8 +53,13 @@ namespace BlogPhone.Pages.admin
             oldUser.Password = ChangeUser.Password;
             oldUser.Email = ChangeUser.Email;
             oldUser.Money = ChangeUser.Money;
-            oldUser.Role = ChangeUser.Role;
-            if(RoleAddDays != 0 && oldUser.RoleValidityDate is not null)
+
+            if(oldUser.Role != ChangeUser.Role) // if role changed
+            {
+                oldUser.Role = ChangeUser.Role;
+                oldUser.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
+            }
+            else if(RoleAddDays != 0 && oldUser.RoleValidityDate is not null) // if days added
             {
                 TimeSpan ts = new TimeSpan(RoleAddDays, 0, 0, 0);
                 DateTime dt = DateTime.Parse(oldUser.RoleValidityDate);
