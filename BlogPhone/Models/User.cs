@@ -11,8 +11,7 @@
         public string? BanDate { get; set; } // banned to this date
         public int Money { get; set; } = 0;
 
-        public User()
-        { }
+        public User() { }
 
         public User(string name, string password, string email, string role)
         {

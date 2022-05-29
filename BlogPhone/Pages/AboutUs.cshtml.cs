@@ -10,7 +10,7 @@ namespace BlogPhone.Pages
         readonly ApplicationContext context;
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
-
+        public AboutUsInfo? AUI { get; set; }
         public AboutUsModel(ApplicationContext db)
         {
             context = db;
@@ -30,6 +30,8 @@ namespace BlogPhone.Pages
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
             }
 
+            AUI = await context.AboutUsPage.AsNoTracking().FirstOrDefaultAsync();
+
             return Page();
         }
         /// <summary>
@@ -42,7 +44,7 @@ namespace BlogPhone.Pages
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate })
+                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate, Role = u.Role })
                     .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

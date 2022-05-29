@@ -22,6 +22,37 @@ namespace BlogPhone.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("BlogPhone.Models.AboutUsInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("P1_ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("P1_Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("P1_Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("P2_ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("P2_Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("P2_Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsPage");
+                });
+
             modelBuilder.Entity("BlogPhone.Models.ArticleBlog", b =>
                 {
                     b.Property<int>("Id")

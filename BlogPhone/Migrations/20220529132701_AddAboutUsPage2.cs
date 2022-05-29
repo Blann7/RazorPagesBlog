@@ -4,7 +4,7 @@
 
 namespace BlogPhone.Migrations
 {
-    public partial class newDBinitial : Migration
+    public partial class AddAboutUsPage2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

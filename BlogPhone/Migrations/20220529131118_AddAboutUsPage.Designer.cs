@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogPhone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220508193450_addUser")]
-    partial class addUser
+    [Migration("20220529131118_AddAboutUsPage")]
+    partial class AddAboutUsPage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,37 @@ namespace BlogPhone.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("BlogPhone.Models.AboutUsInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("P1_ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("P1_Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("P1_Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("P2_ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("P2_Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("P2_Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsPage");
+                });
+
             modelBuilder.Entity("BlogPhone.Models.ArticleBlog", b =>
                 {
                     b.Property<int>("Id")
@@ -32,7 +63,7 @@ namespace BlogPhone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AricleText")
+                    b.Property<string>("ArticleText")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ImageData")
@@ -60,13 +91,25 @@ namespace BlogPhone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("BanDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleValidityDate")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

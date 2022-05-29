@@ -47,6 +47,18 @@ namespace BlogPhone.Pages
             else Articles = arts.TakeLast(int.Parse(Request.Cookies["indexLoad"]!)).ToList();
             Articles.Reverse();
 
+            //AboutUsInfo AUI = new() // Create default line
+            //{
+            //    P1_ImageData = null,
+            //    P1_Title = "title 1",
+            //    P1_Text = "text 1",
+            //    P2_ImageData = null,
+            //    P2_Title = "title 2",
+            //    P2_Text = "text 2"
+            //};
+            //await context.AboutUsPage.AddAsync(AUI);
+            //await context.SaveChangesAsync();
+
             return Page();
         }
         public IActionResult OnPostMore() // "Показать больше" pressed

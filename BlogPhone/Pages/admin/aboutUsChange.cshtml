@@ -1,0 +1,44 @@
+﻿@page
+@model BlogPhone.Pages.admin.aboutUsChangeModel
+@{
+}
+
+<form method="post" asp-antiforgery="true" enctype="multipart/form-data">
+
+    <h3>Заголовок параграф 1</h3>
+    <textarea type="text" name="P1_Title" required cols=100 rows=2>@Model.AUI?.P1_Title</textarea>
+    <br>
+
+    <h3>Текст параграф 1</h3>
+    <textarea type="text" name="P1_Text" required cols=100 rows=20>@Model.AUI?.P1_Text</textarea>
+    <br>
+
+    <h3>Фото параграф 1</h3>
+    <input type="file" name="Image1" />
+    @if(@Model.AUI?.P1_ImageData is not null)
+    {
+        <img style="height:500px; width:500px" src="@ImageWorking.GetImageURLFromBytesArray(@Model.AUI.P1_ImageData)" />
+    }
+    <br>
+
+    <hr /><br />
+
+    <h3>Заголовок параграф 2</h3>
+    <textarea type="text" name="P2_Title" required cols=100 rows=2>@Model.AUI?.P2_Title</textarea>
+    <br>
+
+    <h3>Текст параграф 2</h3>
+    <textarea type="text" name="P2_Text" required cols=100 rows=20>@Model.AUI?.P2_Text</textarea>
+    <br>
+
+    <h3>Фото параграф 2</h3>
+    <input type="file" name="Image2" />
+    @if(@Model.AUI?.P2_ImageData is not null)
+    {
+        <img style="height:500px; width:500px" src="@ImageWorking.GetImageURLFromBytesArray(@Model.AUI.P2_ImageData)" />
+    }
+
+    <br> <br>
+
+    <input type="submit" value="Сохранить" />
+</form>
