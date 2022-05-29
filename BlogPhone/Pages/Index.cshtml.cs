@@ -8,7 +8,7 @@ namespace BlogPhone.Pages
     public class IndexModel : PageModel
     {
         readonly ApplicationContext context;
-        private Mutex mutex = new Mutex();
+        private static bool VRC_IsWorking = false;
         public List<ArticleBlog> Articles { get; set; } = new();
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
@@ -36,6 +36,7 @@ namespace BlogPhone.Pages
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
 
                 await VRCAsync(); // Validate Roles Checker
+                VRC_IsWorking = false;
             }
 
             if (Request.Cookies["indexLoad"] is null)
@@ -68,7 +69,9 @@ namespace BlogPhone.Pages
         // ValidateRoleChecker -----------------------------------------------------------------------------------------------------
         public async Task VRCAsync()
         {
-            //mutex.WaitOne(); // locker
+            if (VRC_IsWorking) return; // to avoid parallel working
+            else VRC_IsWorking = true;
+
             List<User> users = await context.Users.AsNoTracking()
                 .Select(u => new User { Id = u.Id, Role = u.Role, RoleValidityDate = u.RoleValidityDate })
                 .Where(u => u.Role != "user").ToListAsync();
@@ -78,7 +81,7 @@ namespace BlogPhone.Pages
             foreach (User user in users)
             {
                 if (user.RoleValidityDate is null)
-                    throw new Exception("ValidateChecker RoleValidityChecker.StartCheckAsync: user.RoleValidityDate is null");
+                    throw new Exception("VRC: user.RoleValidityDate is null");
 
                 DateTime dt = DateTime.Parse(user.RoleValidityDate);
 
@@ -95,13 +98,11 @@ namespace BlogPhone.Pages
                         throw new Exception("ValidateChecker RoleValidityChecker.StartCheckAsync: fullUser is null");
 
                     fullUser.Role = "user";
-                    Console.WriteLine($"Отработал: (id {fullUser.Id}) {fullUser.Name}");
 
                     context.Users.Update(fullUser);
                     await context.SaveChangesAsync();
                 }
             }
-            //mutex.ReleaseMutex(); // release locker
         }
     }
 }
