@@ -18,18 +18,29 @@ namespace BlogPhone.Pages.Office
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/Auth/Login");
-            int userId = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
-
-            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
-            if(SiteUser is null) return RedirectToPage("/Auth/Login");
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
             // ban check
-            bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
             return Page();
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

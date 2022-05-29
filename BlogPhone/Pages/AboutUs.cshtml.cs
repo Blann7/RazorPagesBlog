@@ -19,16 +19,11 @@ namespace BlogPhone.Pages
         {
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
-                if (HttpContext.User.FindFirst("Id") is null) return RedirectToPage("/auth/logout");
-                int Id = int.Parse(HttpContext.User.FindFirst("Id")!.Value);
-
-                SiteUser = await context.Users.AsNoTracking()
-                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate })
-                    .FirstOrDefaultAsync(u => u.Id == Id);
-                if (SiteUser is null) return RedirectToPage("/auth/logout");
+                (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+                if (getInfoResult != (true, true)) return BadRequest();
 
                 // ban check
-                bool banned = AccessChecker.BanCheck(SiteUser.BanDate);
+                bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
                 if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
                 // ---------
 
@@ -36,6 +31,22 @@ namespace BlogPhone.Pages
             }
 
             return Page();
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate })
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

@@ -11,8 +11,9 @@ namespace BlogPhone.Pages.store
     public class BuyRoleModel : PageModel
     {
         readonly ApplicationContext context;
-        public string? Role { get; set; }
         int roleCost;
+        public string? Role { get; set; }
+        public User? SiteUser { get; set; }
         public BuyRoleModel(ApplicationContext db)
         {
             context = db;
@@ -22,16 +23,11 @@ namespace BlogPhone.Pages.store
             if (role != "admin" && role != "moder" && role != "standart" && role != "user") return NotFound();
             Role = role;
 
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/auth/logout");
-
-            User? user = await context.Users.AsNoTracking()
-                .Select(u => new Models.User { Id = u.Id, BanDate = u.BanDate })
-                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
-            if(user is null) return RedirectToPage("/auth/logout");
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
             // ban check
-            bool banned = AccessChecker.BanCheck(user.BanDate);
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
@@ -43,32 +39,58 @@ namespace BlogPhone.Pages.store
             if (role != "admin" && role != "moder" && role != "standart" && role != "user") return NotFound();
             Role = role;
 
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/auth/logout");
-
-            User? user = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == idString);
-            if (user is null) return NotFound();
+            (bool, bool) getInfoResult = await TryGetFULLSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
             SetRoleCost();
 
-            if (user.Money < roleCost)
+            if (SiteUser!.Money < roleCost)
                 return Content("You have not enough money", "text/html", Encoding.UTF8);
             else
             {
-                user.Money -= roleCost;
-                user.Role = Role;
+                SiteUser.Money -= roleCost;
+                SiteUser.Role = Role;
                 if(Role != "user")
-                    user.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
+                    SiteUser.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
                 else
-                    user.RoleValidityDate = DateTime.UtcNow.AddYears(100).ToString();
+                    SiteUser.RoleValidityDate = DateTime.UtcNow.AddYears(100).ToString();
 
-                context.Users.Update(user);
+                context.Users.Update(SiteUser);
                 await context.SaveChangesAsync();
             }
 
             return RedirectToPage("/goods");
         }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
 
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new Models.User { Id = u.Id, BanDate = u.BanDate }) // selected info
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
+        }
+        /// <summary>
+        /// Fill SiteUser with all info property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetFULLSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == idString); // full info
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
+        }
         private void SetRoleCost()
         {
             if (Role == "admin") roleCost = AccessChecker.ADMIN_COST;

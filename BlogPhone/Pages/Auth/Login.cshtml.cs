@@ -21,14 +21,13 @@ namespace BlogPhone.Pages.Auth
         {
             context = db;
         }
-        public void OnGet()
-        { }
         public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
-            User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
-            if (user is null || user.Name != UserName || user.Password != UserPassword) 
+            User? user = await context.Users
+                .Select(u => new User { Id = u.Id, Name = u.Name, Password = u.Password })
+                .FirstOrDefaultAsync(u => u.Name == UserName && u.Password == UserPassword);
+            if (user is null || user.Name != UserName || user.Password != UserPassword) // to register observation
                 return Content("ѕользователь с такими данными не найден!", "text/html", Encoding.UTF8);
-            if (user.Role is null) return BadRequest();
 
             List<Claim> claims = new ()
             {
@@ -39,13 +38,15 @@ namespace BlogPhone.Pages.Auth
 
             AuthenticationProperties authenticationProperties = new();
             if (UserSaveMe)
-                authenticationProperties = new AuthenticationProperties() { IsPersistent = true, AllowRefresh = true };
-            else
-                authenticationProperties = new AuthenticationProperties() 
-                { 
+                authenticationProperties = new () { 
                     IsPersistent = true, 
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1), 
-                    AllowRefresh = true 
+                    AllowRefresh = true, 
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30) 
+                };
+            else
+                authenticationProperties = new () 
+                { 
+                    AllowRefresh = true // expire: session
                 };
 
             await HttpContext.SignInAsync(

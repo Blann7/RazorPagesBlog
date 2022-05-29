@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-string connection = builder.Configuration.GetConnectionString("Development");
+//string connection = builder.Configuration.GetConnectionString("Development");
+string connection = builder.Configuration.GetConnectionString("DB_Host_Dev");
 //string connection = builder.Configuration.GetConnectionString("RegRu");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
@@ -16,7 +17,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/auth/login";
         options.LogoutPath = "/auth/logout";
-        options.ExpireTimeSpan = TimeSpan.FromDays(30);
         options.Cookie.Name = "auth";
     });
 builder.Services.AddAuthorization();
