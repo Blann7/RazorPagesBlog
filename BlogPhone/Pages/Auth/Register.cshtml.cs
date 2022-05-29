@@ -18,7 +18,6 @@ namespace BlogPhone.Pages
         { 
             context = db; 
         }
-        public void OnGet() { }
         public async Task<IActionResult> OnPostAsync()
         {
             string confirmPassword = Request.Form["passwordagain"];
@@ -27,34 +26,40 @@ namespace BlogPhone.Pages
                 return Page();
             }
 
-            // to avoid repetition
-            User? user = await context.Users.FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
+            // To avoid repetition
+            User? user = await context.Users
+                .Select(u => new User { Name = u.Name })
+                .FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
             if (user is not null) return Content("ѕользователь с таким именем уже есть!", "text/html", Encoding.UTF8);
 
-            user = await context.Users.FirstOrDefaultAsync(u => u.Email == SiteUser.Email);
+            user = await context.Users
+                .Select(u => new User { Email = u.Email })
+                .FirstOrDefaultAsync(u => u.Email == SiteUser.Email);
             if (user is not null) return Content("ѕользователь с такой почтой уже есть!", "text/html", Encoding.UTF8);
             //--------------------
 
-            SiteUser.Role = "user"; // default Role for all site's users
+            SiteUser.Role = "user"; // Default Role for all site's users
 
             await context.Users.AddAsync(SiteUser);
             await context.SaveChangesAsync();
 
             // login --------------------------------------
-            User? loginUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
+            User? loginUser = await context.Users.AsNoTracking()
+                .Select(u => new User { Id = u.Id, Name = u.Name })
+                .FirstOrDefaultAsync(u => u.Name == SiteUser.Name);
             if(loginUser is null) return RedirectToPage("/auth/login");
 
             List<Claim> claims = new() {
-                new Claim("Id", loginUser.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, loginUser.Role?.ToString() ?? "undefined")
+                new Claim("Id", loginUser.Id.ToString())
             };
 
             ClaimsIdentity claimsIdentity = new (claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            AuthenticationProperties authenticationProperties = new() { AllowRefresh = true }; // expire: session
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(5), AllowRefresh = true });
+                authenticationProperties);
             // --------------------------------------------
 
             return RedirectToPage("/index");
