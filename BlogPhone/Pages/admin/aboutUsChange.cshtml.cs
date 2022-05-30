@@ -28,8 +28,6 @@ namespace BlogPhone.Pages.admin
             bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
             if (!access) return RedirectToPage("/auth/logout");
 
-            //await ResetTableAsync();
-
             AUI = await context.AboutUsPage.FirstOrDefaultAsync();
 
             return Page();
@@ -77,30 +75,6 @@ namespace BlogPhone.Pages.admin
             ViewData["email"] = SiteUser.Email;
 
             return (true, true);
-        }
-        /// <summary>
-        /// Reset table, add defa. It need when you setup new DB.
-        /// </summary>
-        private async Task ResetTableAsync()
-        {
-            List<AboutUsInfo> aui = await context.AboutUsPage.ToListAsync();
-            foreach (AboutUsInfo a in aui) // Delete all content
-            {
-                context.AboutUsPage.Remove(a);
-            }
-
-            AUI = new() // Create default line
-            {
-                P1_ImageData = null,
-                P1_Title = "title 1",
-                P1_Text = "text 1",
-                P2_ImageData = null,
-                P2_Title = "title 2",
-                P2_Text = "text 2"
-            };
-
-            await context.AboutUsPage.AddAsync(AUI); // Add it
-            await context.SaveChangesAsync();
         }
     }
 }

@@ -47,17 +47,7 @@ namespace BlogPhone.Pages
             else Articles = arts.TakeLast(int.Parse(Request.Cookies["indexLoad"]!)).ToList();
             Articles.Reverse();
 
-            //AboutUsInfo AUI = new() // Create default line
-            //{
-            //    P1_ImageData = null,
-            //    P1_Title = "title 1",
-            //    P1_Text = "text 1",
-            //    P2_ImageData = null,
-            //    P2_Title = "title 2",
-            //    P2_Text = "text 2"
-            //};
-            //await context.AboutUsPage.AddAsync(AUI);
-            //await context.SaveChangesAsync();
+            //await ResetAboutUsInfoDataBase();
 
             return Page();
         }
@@ -91,6 +81,29 @@ namespace BlogPhone.Pages
             if (SiteUser is null) return (true, false);
 
             return (true, true);
+        }
+        /// <summary>
+        /// Remove all content in AboutUsInfo table, than add work line
+        /// </summary>
+        private async Task ResetAboutUsInfoDataBase()
+        {
+            List<AboutUsInfo> aui = await context.AboutUsPage.ToListAsync();
+            foreach (AboutUsInfo a in aui) // Delete all content
+            {
+                context.AboutUsPage.Remove(a);
+            }
+
+            AboutUsInfo AUI = new() // add work line
+            {
+                P1_ImageData = null,
+                P1_Title = "title 1",
+                P1_Text = "text 1",
+                P2_ImageData = null,
+                P2_Title = "title 2",
+                P2_Text = "text 2"
+            };
+            await context.AboutUsPage.AddAsync(AUI);
+            await context.SaveChangesAsync();
         }
         // ValidateRoleChecker -----------------------------------------------------------------------------------------------------
         public async Task VRCAsync()
