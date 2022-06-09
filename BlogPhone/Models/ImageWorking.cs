@@ -26,7 +26,8 @@
         public static async Task<byte[]> GetImageDataFromDefaultImageAsync()
         {
             byte[]? imageData;
-            using (FileStream fs = new FileStream($"{Environment.CurrentDirectory}/wwwroot/images/default-thumbnail.jpg", FileMode.Open))
+            using (FileStream fs = new FileStream($"~/images/default-thumbnail.jpg", FileMode.Open))
+            // {Environment.CurrentDirectory}/wwwroot/images/default-thumbnail.jpg
             {
                 byte[] fsbyte = new byte[fs.Length];
                 await fs.ReadAsync(fsbyte);

@@ -106,6 +106,17 @@
                 </a>
               </div>
             </div>
+            @if(Model.SiteUser.Role == "admin")
+            {
+            <div class="u-border-2 u-border-grey-75 u-container-style u-list-item u-radius-6 u-repeater-item u-shape-round">
+                <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-3">
+                    <a class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-custom-item u-none u-text-palette-1-base u-btn-3" asp-page="/admin/VRC">
+                        <span style="color:red">(PRIVATE!)</span> Проверка VRC
+                        <br>
+                    </a>
+                </div>
+            </div>
+            }
           </div>
         </div>
       </div>

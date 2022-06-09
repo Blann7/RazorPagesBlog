@@ -32,7 +32,32 @@ namespace BlogPhone.Pages
 
             AUI = await context.AboutUsPage.AsNoTracking().FirstOrDefaultAsync();
 
+            //await ResetAboutUsInfoDataBase();
+
             return Page();
+        }
+        /// <summary>
+        /// Remove all content in AboutUsInfo table, than add one work line
+        /// </summary>
+        private async Task ResetAboutUsInfoDataBase()
+        {
+            List<AboutUsInfo> aui = await context.AboutUsPage.ToListAsync();
+            foreach (AboutUsInfo a in aui) // Delete all content
+            {
+                context.AboutUsPage.Remove(a);
+            }
+
+            AboutUsInfo AUI = new() // add work line
+            {
+                P1_ImageData = null,
+                P1_Title = "title 1",
+                P1_Text = "text 1",
+                P2_ImageData = null,
+                P2_Title = "title 2",
+                P2_Text = "text 2"
+            };
+            await context.AboutUsPage.AddAsync(AUI);
+            await context.SaveChangesAsync();
         }
         /// <summary>
         /// Fill SiteUser property
