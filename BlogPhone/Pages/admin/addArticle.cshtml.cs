@@ -37,12 +37,10 @@ namespace BlogPhone.Pages
         {
             if(Image is not null)
                 ImageData = ImageWorking.GetImageDataFromIFormFile(Image);
-            else // default picture
-                ImageData = await ImageWorking.GetImageDataFromDefaultImageAsync();
 
             // ---------------------------------------------
 
-            if (Label != null && ArticleText != null && ImageData != null)
+            if (Label != null && ArticleText != null)
             {
                 ArticleBlog ab = new (Label, ArticleText, ImageData);
 

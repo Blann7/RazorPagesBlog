@@ -20,10 +20,18 @@
     <h3>Фото к статье</h3>
     <input type="file" name="image" />
 
-    <img style="height:500px; width:500px" src="@ImageWorking.GetImageURLFromBytesArray(@Model.Article.ImageData)" />
+
+    @if(Model.Article.ImageData is null)
+    {
+        <img style="height:500px; width:500px" src="~/images/default-thumbnail.jpg" />
+    }
+    else
+    {
+         <img style="height:500px; width:500px" src="@ImageWorking.GetImageURLFromBytesArray(@Model.Article.ImageData)" />   
+    }
 
     <br> <br>
 
-    <input type="submit" value="Создать" />
+    <input type="submit" value="Сохранить" />
 </form>
 

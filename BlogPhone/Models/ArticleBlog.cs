@@ -12,7 +12,7 @@
         public ArticleBlog()
         { }
 
-        public ArticleBlog(string label, string articleText, byte[] imageData)
+        public ArticleBlog(string label, string articleText, byte[]? imageData)
         {
             Label = label;
             ArticleText = articleText;

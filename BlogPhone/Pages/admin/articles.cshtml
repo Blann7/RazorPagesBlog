@@ -95,7 +95,14 @@
                     <a class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1" style="padding-right:5%" asp-page="/admin/articleChange" asp-route-id="@art.Id">Изменить</a>
                     <a class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2" asp-page="/admin/articles" asp-route-id="@art.Id">Удалить</a>
                     <h3 class="u-text u-text-2">(ID - @art.Id) @art.Label</h3>
-                    <img style="height:200px; width:200px" src="@ImageWorking.GetImageURLFromBytesArray(art.ImageData)" />
+                    @if(art.ImageData is null)
+                    {
+                        <img style="height:200px; width:200px" src="~/images/default-thumbnail.jpg" />
+                    }
+                    else
+                    {
+                         <img style="height:200px; width:200px" src="@ImageWorking.GetImageURLFromBytesArray(art.ImageData)" />   
+                    }
                 }
             }
 

@@ -1,4 +1,6 @@
-﻿namespace BlogPhone.Models
+﻿using System.Text;
+
+namespace BlogPhone.Models
 {
     public static class ImageWorking
     {
@@ -22,19 +24,6 @@
             string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
 
             return imgDataURL;
-        }
-        public static async Task<byte[]> GetImageDataFromDefaultImageAsync()
-        {
-            byte[]? imageData;
-            using (FileStream fs = new FileStream($"~/images/default-thumbnail.jpg", FileMode.Open))
-            // {Environment.CurrentDirectory}/wwwroot/images/default-thumbnail.jpg
-            {
-                byte[] fsbyte = new byte[fs.Length];
-                await fs.ReadAsync(fsbyte);
-
-                imageData = fsbyte;
-            }
-            return imageData;
         }
     }
 }

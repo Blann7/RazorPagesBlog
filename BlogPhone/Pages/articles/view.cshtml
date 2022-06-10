@@ -59,14 +59,17 @@
       <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
         <div class="u-container-style u-expanded-width u-post-details u-post-details-1">
           <div class="u-container-layout u-valign-middle u-container-layout-1">
-            <img alt="" class="u-blog-control u-expanded-width u-image u-image-default u-image-1" src="@ImageWorking.GetImageURLFromBytesArray(Model.Article?.ImageData)">
+            @if (Model.Article?.ImageData is not null)
+            {
+                <img alt="" class="u-blog-control u-expanded-width u-image u-image-default u-image-1" src="@ImageWorking.GetImageURLFromBytesArray(Model.Article?.ImageData)">
+            }
             <h2 class="u-blog-control u-text u-text-1">@Model.Article?.Label</h2>
-                <div class="u-blog-control u-metadata u-metadata-1">
-                  <span class="u-meta-date u-meta-icon">@Model.Article?.PublishDate</span>
-                </div>
-                <div class="u-align-justify u-blog-control u-post-content u-text u-text-2 fr-view">
-                    @Model.Article?.ArticleText
-                </div>
+            <div class="u-blog-control u-metadata u-metadata-1">
+                <span class="u-meta-date u-meta-icon">@Model.Article?.PublishDate</span>
+            </div>
+            <div class="u-align-justify u-blog-control u-post-content u-text u-text-2 fr-view">
+                @Model.Article?.ArticleText
+            </div>
             </div>
         </div>
       </div>
