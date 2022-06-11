@@ -27,7 +27,7 @@ namespace BlogPhone.Pages.store
             if (getInfoResult != (true, true)) return BadRequest();
 
             // ban check
-            bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
@@ -50,10 +50,10 @@ namespace BlogPhone.Pages.store
             {
                 SiteUser.Money -= roleCost;
                 SiteUser.Role = Role;
-                if(Role != "user")
-                    SiteUser.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
+                if (Role != "user")
+                    SiteUser.RoleValidityMs = DateTimeOffset.UtcNow.AddDays(31).ToUnixTimeMilliseconds();
                 else
-                    SiteUser.RoleValidityDate = DateTime.UtcNow.AddYears(100).ToString();
+                    SiteUser.RoleValidityMs = DateTimeOffset.UtcNow.AddYears(100).ToUnixTimeMilliseconds();
 
                 context.Users.Update(SiteUser);
                 await context.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace BlogPhone.Pages.store
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new Models.User { Id = u.Id, BanDate = u.BanDate }) // selected info
+                .Select(u => new Models.User { Id = u.Id, BanMs = u.BanMs }) // selected info
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

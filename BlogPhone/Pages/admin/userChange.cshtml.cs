@@ -35,7 +35,7 @@ namespace BlogPhone.Pages.admin
             ChangeUser = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
             if (ChangeUser is null) return NotFound();
 
-            ChangeUser.BanDate = DateTime.UtcNow.ToString();
+            ChangeUser.BanMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             context.Users.Update(ChangeUser);
             await context.SaveChangesAsync();
@@ -57,14 +57,16 @@ namespace BlogPhone.Pages.admin
             if(oldUser.Role != ChangeUser.Role) // if role changed
             {
                 oldUser.Role = ChangeUser.Role;
-                oldUser.RoleValidityDate = DateTime.UtcNow.AddDays(31).ToString();
+                oldUser.RoleValidityMs = DateTimeOffset.UtcNow.AddDays(31).ToUnixTimeMilliseconds();
             }
-            else if(RoleAddDays != 0 && oldUser.RoleValidityDate is not null) // if days added
+            else if(RoleAddDays != 0 && oldUser.RoleValidityMs is not null) // if days added
             {
-                TimeSpan ts = new TimeSpan(RoleAddDays, 0, 0, 0);
-                DateTime dt = DateTime.Parse(oldUser.RoleValidityDate);
+                long dt = DateTimeOffset
+                    .FromUnixTimeMilliseconds((long)oldUser.RoleValidityMs)
+                    .AddDays(RoleAddDays)
+                    .ToUnixTimeMilliseconds();
 
-                oldUser.RoleValidityDate = (dt + ts).ToString();
+                oldUser.RoleValidityMs = dt;
             }
 
             context.Users.Update(oldUser);

@@ -11,6 +11,7 @@ namespace BlogPhone.Pages.admin
     {
         readonly ApplicationContext context;
         [BindProperty] public User? BanUser { get; set; }
+        [BindProperty] public DateTime? BanDate { get; set; }
         public User? SiteUser { get; set; }
         public BanUserModel(ApplicationContext db)
         {
@@ -33,10 +34,12 @@ namespace BlogPhone.Pages.admin
         {
             if(BanUser is null) return NotFound();
 
+            long banDt = DateTimeOffset.Parse(BanDate.ToString()!).ToUnixTimeMilliseconds();
+
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == BanUser.Id); // for ban user
             if(user is null) return NotFound();
 
-            user.BanDate = BanUser.BanDate;
+            user.BanMs = banDt;
             user.Role = "user"; // reset role to user
 
             context.Users.Update(user);
@@ -51,7 +54,7 @@ namespace BlogPhone.Pages.admin
         private async Task<bool> TryGetBanUserAsync(string id)
         {
             BanUser = await context.Users.AsNoTracking()
-                .Select(u => new Models.User { Id = u.Id, Name = u.Name, Email = u.Email, BanDate = u.BanDate })
+                .Select(u => new Models.User { Id = u.Id, Name = u.Name, Email = u.Email, BanMs = u.BanMs })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == id);
             if (BanUser is null) return false;
 

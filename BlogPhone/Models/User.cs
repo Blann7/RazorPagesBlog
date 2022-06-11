@@ -7,8 +7,8 @@
         public string? Password { get; set; }
         public string? Email { get; set; }
         public string? Role { get; set; }
-        public string? RoleValidityDate { get; set; } // role valide to this date (next - reset to user)
-        public string? BanDate { get; set; } // banned to this date
+        public long? RoleValidityMs { get; set; } // role valide to this milliseconds (next - reset to user)
+        public long? BanMs { get; set; } // banned to this milliseconds
         public int Money { get; set; } = 0;
 
         public User() { }

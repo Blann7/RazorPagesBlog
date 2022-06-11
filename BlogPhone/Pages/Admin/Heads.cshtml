@@ -97,10 +97,10 @@
             <table style="align-content:center">
                 @foreach(User? user in @Model.HighRoleUsers.ToList())
                 {
-                    DateTime dt = DateTime.Parse(user.RoleValidityDate!);
+                    DateTimeOffset dt = DateTimeOffset.FromUnixTimeMilliseconds((long)user.RoleValidityMs!);
                     <tr>
                         <th>
-                           (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToShortDateString())
+                           (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToString("d"))
                         </th>
                         <th>
                             || <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a>

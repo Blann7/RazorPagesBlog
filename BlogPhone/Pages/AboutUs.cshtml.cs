@@ -23,7 +23,7 @@ namespace BlogPhone.Pages
                 if (getInfoResult != (true, true)) return BadRequest();
 
                 // ban check
-                bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
+                bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
                 if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
                 // ---------
 
@@ -69,7 +69,7 @@ namespace BlogPhone.Pages
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                    .Select(u => new User { Id = u.Id, Email = u.Email, BanDate = u.BanDate, Role = u.Role })
+                    .Select(u => new User { Id = u.Id, Email = u.Email, BanMs = u.BanMs, Role = u.Role })
                     .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

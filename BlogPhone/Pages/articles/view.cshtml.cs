@@ -9,30 +9,41 @@ namespace BlogPhone.Pages
     {
         readonly ApplicationContext context;
         public ArticleBlog? Article { get; set; }
-
+        public User? SiteUser { get; set; }
         public ViewModel(ApplicationContext db)
         {
             context = db;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
+
             // ban check
-            string? userId = HttpContext.User.FindFirst("Id")?.Value;
-
-            User? user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == userId);
-
-            if (user is not null)
-            {
-                bool banned = AccessChecker.BanCheck(user.BanDate);
-                if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
-            }
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
+            if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
-
             Article = await context.ArticleBlogs.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
-            if (Article is null) return BadRequest();
+            if (Article is null) return NotFound();
             
             return Page();
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                    .Select(u => new User { Id = u.Id, BanMs = u.BanMs })
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

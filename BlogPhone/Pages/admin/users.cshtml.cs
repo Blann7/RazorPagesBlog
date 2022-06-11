@@ -26,7 +26,7 @@ namespace BlogPhone.Pages.admin
             if (!access) return BadRequest();
 
             Users = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Name = u.Name, BanDate = u.BanDate })
+                .Select(u => new User { Id = u.Id, Name = u.Name, BanMs = u.BanMs })
                 .Where(u => u.Id < 16).ToListAsync();
 
             return Page();
@@ -37,7 +37,7 @@ namespace BlogPhone.Pages.admin
             if (getInfoResult != (true, true)) return BadRequest();
 
             Users = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Name = u.Name, BanDate = u.BanDate })
+                .Select(u => new User { Id = u.Id, Name = u.Name, BanMs = u.BanMs })
                 .Where(u => u.Id.ToString() == UserId).ToListAsync();
 
             return Page();

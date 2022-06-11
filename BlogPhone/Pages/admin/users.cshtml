@@ -95,10 +95,10 @@
                     <a class="u-border-none u-btn u-button-style u-hover-palette-5-light-2 u-palette-5-light-1 u-btn-1" style="padding-right:12%" asp-page="/admin/userChange" asp-route-id="@user.Id">Изменить</a>
                     <a class="u-border-none u-btn u-button-style u-hover-palette-2-light-2 u-palette-2-light-1 u-btn-2" asp-page="/admin/userBan" asp-route-id="@user.Id">Заблокировать</a>
                     <h3 class="u-text u-text-2">(@user.Id) @user.Name
-                        @if (!AccessChecker.BanCheck(user.BanDate) && user.BanDate is not null)
+                        @if (!AccessChecker.BanCheck(user.BanMs) && user.BanMs is not null)
                         {
-                            DateTime dt = DateTime.Parse(user.BanDate);
-                            <small style="font-size:12px; color:red">(блокировка до @dt.ToShortDateString())</small>
+                                DateTimeOffset dt = DateTimeOffset.FromUnixTimeMilliseconds((long)user.BanMs).ToLocalTime();
+                                <small style="font-size:12px; color:red">(блокировка до @dt.ToString("g"))</small>
                         }
                     </h3><br />
                 }

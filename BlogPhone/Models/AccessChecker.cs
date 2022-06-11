@@ -33,12 +33,12 @@
         /// </summary>
         /// <param name="userBanDate"></param>
         /// <returns></returns>
-        public static bool BanCheck(in string? userBanDate)
+        public static bool BanCheck(in long? userBanMs)
         {
-            if(userBanDate is null) return true;
+            if(userBanMs is null) return true;
 
-            DateTime banDate = DateTime.Parse(userBanDate);
-            if(DateTime.UtcNow < banDate) return false;
+            long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(); // now ms
+            if(nowMs < userBanMs) return false;
             
             return true;
         }

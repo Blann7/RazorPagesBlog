@@ -42,19 +42,19 @@ namespace BlogPhone.Pages.admin
         private async Task VRCAsync()
         {
             List<User> users = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Role = u.Role, RoleValidityDate = u.RoleValidityDate })
+                .Select(u => new User { Id = u.Id, Role = u.Role, RoleValidityMs = u.RoleValidityMs })
                 .Where(u => u.Role != "user").ToListAsync();
 
             List<User> expiratedUsers = new();
 
             foreach (User user in users)
             {
-                if (user.RoleValidityDate is null)
-                    throw new Exception("VRC: user.RoleValidityDate is null");
+                if (user.RoleValidityMs is null)
+                    throw new Exception("VRC: user.RoleValidityMs is null");
 
-                DateTime dt = DateTime.Parse(user.RoleValidityDate);
+                long nowDt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-                if (dt < DateTime.UtcNow)
+                if (user.RoleValidityMs < nowDt)
                     expiratedUsers.Add(user);
             }
 
@@ -64,7 +64,7 @@ namespace BlogPhone.Pages.admin
                 {
                     User? fullUser = await context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
                     if (fullUser is null)
-                        throw new Exception("ValidateChecker RoleValidityChecker.StartCheckAsync: fullUser is null");
+                        throw new Exception("admin/VRC RoleValidityChecker: fullUser is null");
 
                     Results!.Add($"снят {fullUser.Name} (id: {fullUser.Id})");
 

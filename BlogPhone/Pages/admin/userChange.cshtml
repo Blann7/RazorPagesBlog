@@ -69,7 +69,7 @@
     </select>
     <br />
 
-   @if(!@AccessChecker.BanCheck(@Model.ChangeUser!.BanDate))
+   @if(!@AccessChecker.BanCheck(@Model.ChangeUser!.BanMs))
     {
         <p>
             <a asp-page="userChange" asp-page-handler="Unban" style="color:indianred">Разблокировать аккаунт</a>

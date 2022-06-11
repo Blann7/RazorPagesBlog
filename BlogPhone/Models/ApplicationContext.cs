@@ -9,9 +9,6 @@ namespace BlogPhone.Models
         public DbSet<AboutUsInfo> AboutUsPage { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
-            //Database.EnsureCreated();
-            //Database.EnsureDeleted();
-        }
+        { }
     }
 }
