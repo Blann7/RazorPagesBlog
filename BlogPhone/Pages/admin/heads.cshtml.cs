@@ -13,6 +13,7 @@ namespace BlogPhone.Pages.Admin
         public string? Message { get; set; } = "Изменить роль по ID";
         [BindProperty] public int? UserId { get; set; }
         [BindProperty] public string? UserRole { get; set; }
+        [BindProperty] public bool UserFullDostup { get; set; } = false;
         public List<User> HighRoleUsers { get; private set; } = new();
         public User? SiteUser { get; set; }
         public HeadsModel(ApplicationContext db)
@@ -27,16 +28,20 @@ namespace BlogPhone.Pages.Admin
             bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin");
             if (!access) return BadRequest();
 
-            if (id is not null) await SetUserRole(id); // if "снять с поста" button pressed
+            if (id is not null && SiteUser.FullDostup) await SetUserRole(id); // if "снять с поста" button pressed
 
             HighRoleUsers = await context.Users
-                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityMs = u.RoleValidityMs })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityMs = u.RoleValidityMs, FullDostup = u.FullDostup })
                 .Where(u => u.Role != "user").ToListAsync();
 
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
+            if (SiteUser!.FullDostup == false) return NotFound();
+
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
             if(user is null)
             {
@@ -47,6 +52,9 @@ namespace BlogPhone.Pages.Admin
             Message = $"Вечная роль выдана! || {user.Name}: {user.Role} => {UserRole}";
             user.Role = UserRole;
             user.RoleValidityMs = DateTimeOffset.UtcNow.AddYears(100).ToUnixTimeMilliseconds();
+
+            if (UserFullDostup) user.FullDostup = true;
+            else user.FullDostup = false;
 
             context.Users.Update(user);
             await context.SaveChangesAsync();
@@ -75,7 +83,7 @@ namespace BlogPhone.Pages.Admin
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role, FullDostup = u.FullDostup })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

@@ -49,9 +49,6 @@ namespace BlogPhone.Pages.admin
 
             foreach (User user in users)
             {
-                if (user.RoleValidityMs is null)
-                    throw new Exception("VRC: user.RoleValidityMs is null");
-
                 long nowDt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 if (user.RoleValidityMs < nowDt)

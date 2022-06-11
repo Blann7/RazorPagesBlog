@@ -1,4 +1,6 @@
-﻿namespace BlogPhone.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BlogPhone.Models
 {
     public class User
     {
@@ -7,18 +9,11 @@
         public string? Password { get; set; }
         public string? Email { get; set; }
         public string? Role { get; set; }
-        public long? RoleValidityMs { get; set; } // role valide to this milliseconds (next - reset to user)
-        public long? BanMs { get; set; } // banned to this milliseconds
-        public int Money { get; set; } = 0;
-
+        public bool FullDostup { get; set; } = false;
+        public long? RoleValidityMs { get; set; } = 0; // role valide to this milliseconds (next - reset to user)
+        public long? BanMs { get; set; } = 0; // banned to this milliseconds
+        [Column(TypeName = "decimal(18,2)")] public decimal Money { get; set; } = 0;
+        
         public User() { }
-
-        public User(string name, string password, string email, string role)
-        {
-            Name = name;
-            Password = password;
-            Email = email;
-            Role = role;
-        }
     }
 }

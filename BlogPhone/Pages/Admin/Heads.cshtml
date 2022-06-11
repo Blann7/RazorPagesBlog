@@ -74,23 +74,29 @@
       </div>
     </header>
     <section class="u-align-center u-clearfix u-section-1" id="carousel_38c1">
-        <form method="post" asp-antiforgery="true">
-            <h2>@Model.Message</h2>
+        @if (Model.SiteUser!.FullDostup)
+        {
+            <form method="post" asp-antiforgery="true">
+                <h2>@Model.Message</h2>
 
-            <label asp-for="UserId">Введите ID пользователя:</label>
-            <input type="number" id="uId" name="UserId" required asp-for="UserId" />
+                <label asp-for="UserId">Введите ID пользователя:</label>
+                <input type="number" id="uId" name="UserId" required asp-for="UserId" />
 
-            <label asp-for="UserRole">Выберите новую роль (она будет выдана навечно)</label>
-            <select name="UserRole" required asp-for="UserRole">
-                <option value="user">user</option>
-                <option value="standart">standart</option>
-                <option value="moder">moder</option>
-                <option value="admin">admin</option>
-            </select>
-            <button type="submit">Сохранить</button>
-        </form>
+                <label asp-for="UserRole">Выберите новую роль (она будет выдана навечно)</label>
+                <select name="UserRole" required asp-for="UserRole">
+                    <option value="user">user</option>
+                    <option value="standart">standart</option>
+                    <option value="moder">moder</option>
+                    <option value="admin">admin</option>
+                </select>
+
+                <label>Фулл-Доступ</label>
+                <input type="checkbox" asp-for="UserFullDostup" name="UserFullDostup" />
+                <button type="submit">Сохранить</button>
+            </form>
 
         <hr />
+        }
 
         <div style="align-content:center; text-align:center; justify-content:center">
             <h1>Руководители:</h1>
@@ -100,10 +106,22 @@
                     DateTimeOffset dt = DateTimeOffset.FromUnixTimeMilliseconds((long)user.RoleValidityMs!);
                     <tr>
                         <th>
-                           (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToString("d"))
+                           @if(Model.SiteUser.FullDostup && user.FullDostup)
+                            {
+                                <text>
+                                    <span style="color:gold">[FullDostup]</span> (ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToString("d"))
+                                </text>
+                            }
+                            else
+                            {
+                                <text>(ID: @user.Id) Имя: @user.Name | Почта: <small>@user.Email</small> | Роль: @user.Role (до @dt.ToString("d"))</text>
+                            }
                         </th>
                         <th>
-                            || <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a>
+                            @if(Model.SiteUser.FullDostup)
+                            {
+                                <text>|| <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a></text>
+                            }
                         </th>
                     </tr>
                 }
