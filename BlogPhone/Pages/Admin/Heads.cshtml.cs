@@ -30,7 +30,7 @@ namespace BlogPhone.Pages.Admin
             if (id is not null) await SetUserRole(id); // if "снять с поста" button pressed
 
             HighRoleUsers = await context.Users
-                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityDate = u.RoleValidityDate })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityMs = u.RoleValidityMs })
                 .Where(u => u.Role != "user").ToListAsync();
 
             return Page();
@@ -46,7 +46,7 @@ namespace BlogPhone.Pages.Admin
 
             Message = $"Вечная роль выдана! || {user.Name}: {user.Role} => {UserRole}";
             user.Role = UserRole;
-            user.RoleValidityDate = DateTime.UtcNow.AddYears(100).ToString();
+            user.RoleValidityMs = DateTimeOffset.UtcNow.AddYears(100).ToUnixTimeMilliseconds();
 
             context.Users.Update(user);
             await context.SaveChangesAsync();

@@ -12,35 +12,44 @@ namespace BlogPhone.Pages.Auth
     public class LogoutModel : PageModel
     {
         readonly ApplicationContext context;
-        public bool Success { get; set; } = false;
+        public User? SiteUser { get; set; }
         public LogoutModel(ApplicationContext db)
         {
             context = db;
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            // ban check
-            string? userId = HttpContext.User.FindFirst("Id")?.Value;
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
 
-            User? user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == userId);
-            
-            if(user is not null)
-            {
-                bool banned = AccessChecker.BanCheck(user.BanDate);
-                if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
-            }
+            // ban check
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
+            if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                Success = true;
                 return RedirectToPage("/index");
             }
             else
-            {
                 return Page();
-            }
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                    .Select(u => new User { Id = u.Id, BanMs = u.BanMs })
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            return (true, true);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace BlogPhone.Pages.Office
             if (getInfoResult != (true, true)) return BadRequest();
 
             // ban check
-            bool banned = AccessChecker.BanCheck(SiteUser!.BanDate);
+            bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
             // ---------
 
@@ -39,6 +39,8 @@ namespace BlogPhone.Pages.Office
 
             SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            ViewData["email"] = SiteUser.Email;
 
             return (true, true);
         }
