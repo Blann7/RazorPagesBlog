@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogPhone.Models
 {
@@ -12,7 +13,7 @@ namespace BlogPhone.Models
         public bool FullDostup { get; set; } = false;
         public long? RoleValidityMs { get; set; } = 0; // role valide to this milliseconds (next - reset to user)
         public long? BanMs { get; set; } = 0; // banned to this milliseconds
-        [Column(TypeName = "decimal(18,2)")] public decimal Money { get; set; } = 0;
+        [Required, Column(TypeName = "decimal(18,2)")] public decimal Money { get; set; } = 0;
         
         public User() { }
     }
