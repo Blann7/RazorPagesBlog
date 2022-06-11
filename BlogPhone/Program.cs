@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
+using BlogPhone.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 //string connection = builder.Configuration.GetConnectionString("Development");
-//string connection = builder.Configuration.GetConnectionString("DB_Host_dev");
-string connection = builder.Configuration.GetConnectionString("RegRu");
+string connection = builder.Configuration.GetConnectionString("DB_Host_dev");
+//string connection = builder.Configuration.GetConnectionString("RegRu");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-//
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => 
     {
@@ -20,6 +21,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "auth";
     });
 builder.Services.AddAuthorization();
+
+builder.Services.AddHostedService<ValidateChecker>(); // IHosted long service
 
 var app = builder.Build();
 
