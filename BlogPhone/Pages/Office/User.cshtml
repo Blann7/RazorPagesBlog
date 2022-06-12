@@ -1,6 +1,7 @@
 ﻿@page
 @model BlogPhone.Pages.Office.UserModel
 @{
+    ViewData["Title"] = "Личный Кабинет";
     ViewData["Panel"] = false; // to switch off "Панель" button in Shared/Layout
 }
 
@@ -18,10 +19,34 @@
     <h3 style="text-align:center">Почта: @Model.SiteUser!.Email</h3>
     <h3 style="text-align:center">Пароль: @Model.SiteUser!.Password</h3>
 
-    @if(@Model.SiteUser!.Role == "moder" || @Model.SiteUser!.Role == "admin")
+    <p style="text-align:center">
+        <form method="post" asp-antiforgery="true">
+            @if(Model.SiteUserReferralCode is not null)
+            {
+                <label style="color:mediumseagreen" for="code">Реферальная ссылка: </label>
+                <input type="text" name="code" disabled value="@Model.SiteUserReferralCode" />
+            }
+            else
+            {
+                <span style="color:orangered" for="code">Пригласите друга и получите 250 рублей на баланс!</span>
+                <button type="submit">Сгенерировать реферальную ссылку</button>
+            }
+        </form>
+    </p>
+
+    @if (@Model.SiteUser!.Role == "moder" || @Model.SiteUser!.Role == "admin")
     {
         <p>
             <a type="submit" style="margin-top:20px; color:red" asp-page="/admin/panel">Админ-Панель</a>
         </p>
+
+        @if (Model.SiteUserReferralCode is not null)
+        {
+            <p>
+                <form method="post" asp-antiforgery="true" asp-page-handler="Delete">
+                    <button type="submit">(debug) Удалить свою реф ссылку</button>
+                </form>
+            </p>
+        }
     }
 </div>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogPhone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220611065623_DateChangedMs")]
-    partial class DateChangedMs
+    [Migration("20220612165945_ReferralsFix")]
+    partial class ReferralsFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,25 @@ namespace BlogPhone.Migrations
                     b.ToTable("ArticleBlogs");
                 });
 
+            modelBuilder.Entity("BlogPhone.Models.Referral", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Referrals");
+                });
+
             modelBuilder.Entity("BlogPhone.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -97,8 +116,11 @@ namespace BlogPhone.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Money")
-                        .HasColumnType("int");
+                    b.Property<bool>("FullDostup")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogPhone.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220530080827_initial")]
-    partial class initial
+    [Migration("20220612162155_AddedReferalSystem")]
+    partial class AddedReferalSystem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,17 @@ namespace BlogPhone.Migrations
                     b.ToTable("ArticleBlogs");
                 });
 
+            modelBuilder.Entity("BlogPhone.Models.Referral", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.ToTable("Referrals");
+                });
+
             modelBuilder.Entity("BlogPhone.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -91,14 +102,17 @@ namespace BlogPhone.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("BanDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("BanMs")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Money")
-                        .HasColumnType("int");
+                    b.Property<bool>("FullDostup")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -109,8 +123,8 @@ namespace BlogPhone.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleValidityDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("RoleValidityMs")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
