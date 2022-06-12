@@ -17,12 +17,12 @@ namespace BlogPhone.Pages
         public async Task<IActionResult> OnGetAsync(int id)
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            // ban check
-            bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
-            if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
-            // ---------
+            if (getInfoResult == (true, true))
+            {
+                // ban check
+                bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
+                if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
+            }
 
             Article = await context.ArticleBlogs.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
             if (Article is null) return NotFound();

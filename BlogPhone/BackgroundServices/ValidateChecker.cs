@@ -19,7 +19,7 @@ namespace BlogPhone.BackgroundServices
                 await ValidateRoleChecker(); // Checking role validity
 
                 // -------------------------------------------------------------------------
-                await Task.Delay(10000, stoppingToken);
+                await Task.Delay(60000, stoppingToken);
             }
         }
 
