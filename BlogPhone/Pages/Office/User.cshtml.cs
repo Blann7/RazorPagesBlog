@@ -11,28 +11,74 @@ namespace BlogPhone.Pages.Office
     {
         readonly ApplicationContext context;
         public User? SiteUser { get; set; }
-
+        public string? SiteUserReferralCode { get; set; }
         public UserModel(ApplicationContext db)
         {
             context = db;
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            (bool, bool) getInfoResult = await TryGetFULLSiteUserAsync();
             if (getInfoResult != (true, true)) return BadRequest();
 
             // ban check
             bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
-            // ---------
+
+            // Referral
+            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id);
+            if (referral is not null) SiteUserReferralCode = Referral.DOMAIN + referral.Code;
 
             return Page();
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
+
+            Referral referral = new Referral(SiteUser!.Id);
+
+            await context.Referrals.AddAsync(referral);
+            await context.SaveChangesAsync();
+
+            return RedirectToPage("/office/user");
+        }
+        public async Task<IActionResult> OnPostDeleteAsync()
+        {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return BadRequest();
+
+            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id);
+            if (referral is null) return Content("refferal is null", "text/html");
+
+            context.Referrals.Remove(referral);
+            await context.SaveChangesAsync();
+
+            return RedirectToPage("/office/user");
         }
         /// <summary>
         /// Fill SiteUser property
         /// </summary>
         /// <returns>(true, true) if prop filled ok.</returns>
         private async Task<(bool, bool)> TryGetSiteUserAsync()
+        {
+            string? idString = HttpContext.User.FindFirst("Id")?.Value;
+            if (idString is null) return (false, false);
+
+            SiteUser = await context.Users.AsNoTracking()
+                .Select(u => new User() { Id = u.Id })
+                .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (SiteUser is null) return (true, false);
+
+            ViewData["email"] = SiteUser.Email;
+
+            return (true, true);
+        }
+        /// <summary>
+        /// Fill SiteUser property
+        /// </summary>
+        /// <returns>(true, true) if prop filled ok.</returns>
+        private async Task<(bool, bool)> TryGetFULLSiteUserAsync()
         {
             string? idString = HttpContext.User.FindFirst("Id")?.Value;
             if (idString is null) return (false, false);
