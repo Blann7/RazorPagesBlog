@@ -21,10 +21,11 @@
 
     <p style="text-align:center">
         <form method="post" asp-antiforgery="true">
-            @if(Model.SiteUserReferralCode is not null)
+            @if(Model.ReferralUser is not null)
             {
-                <label style="color:mediumseagreen" for="code">Реферальная ссылка: </label>
-                <input type="text" name="code" disabled value="@Model.SiteUserReferralCode" />
+                <label style="font-size:25px;color:mediumseagreen" for="code">Реферальная ссылка: </label>
+                <input type="text" name="code" disabled value="@Referral.DOMAIN@Model.ReferralUser.Code" />
+                <h3 style="text-align:center">Приглашенных пользователей: @Model.ReferralUser.InvitedUsers</h3>
             }
             else
             {
@@ -34,17 +35,17 @@
         </form>
     </p>
 
-    @if (@Model.SiteUser!.Role == "moder" || @Model.SiteUser!.Role == "admin")
+    @if (@Model.SiteUser!.Role == "admin")
     {
         <p>
             <a type="submit" style="margin-top:20px; color:red" asp-page="/admin/panel">Админ-Панель</a>
         </p>
 
-        @if (Model.SiteUserReferralCode is not null)
+        @if (Model.ReferralUser is not null)
         {//
             <p>
                 <form method="post" asp-antiforgery="true" asp-page-handler="Delete">
-                    <button type="submit">(debug) Удалить свою реф ссылку</button>
+                    <button type="submit">(admin) Удалить свою реф ссылку</button>
                 </form>
             </p>
         }

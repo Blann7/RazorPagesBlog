@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogPhone.Models
 {
     public class Referral
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public string? Code { get; set; }
-        public int InvitedUsers { get; set; } = 0;
+        [Required, Display(Name = "ID владельца")] public int UserId { get; set; }
+        [Required, Display(Name = "Бонус-код")] public string? Code { get; set; }
+        [Required, Display(Name = "Приглашено пользователей")] public int InvitedUsers { get; set; } = 0;
 
         public const string DOMAIN = "u1690754.plsk.regruhosting.ru/"; // for link view (office/user)
         public const int USER_MONEY_BONUS = 500; // bonus money for man, WHO invite user

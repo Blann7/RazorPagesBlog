@@ -11,7 +11,7 @@ namespace BlogPhone.Pages.Office
     {
         readonly ApplicationContext context;
         public User? SiteUser { get; set; }
-        public string? SiteUserReferralCode { get; set; }
+        public Referral? ReferralUser { get; set; }
         public UserModel(ApplicationContext db)
         {
             context = db;
@@ -25,9 +25,7 @@ namespace BlogPhone.Pages.Office
             bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
             if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
 
-            // Referral
-            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id);
-            if (referral is not null) SiteUserReferralCode = Referral.DOMAIN + referral.Code;
+            await TryGetReferralUserAsync(); // Referral
 
             return Page();
         }
@@ -48,13 +46,24 @@ namespace BlogPhone.Pages.Office
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
             if (getInfoResult != (true, true)) return BadRequest();
 
-            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id);
+            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id); // full loading (w/o .Select)
             if (referral is null) return Content("refferal is null", "text/html");
 
             context.Referrals.Remove(referral);
             await context.SaveChangesAsync();
 
             return RedirectToPage("/office/user");
+        }
+        /// <summary>
+        /// Fill ReferralUser property
+        /// </summary>
+        /// <returns>true if prop filled ok.</returns>
+        private async Task TryGetReferralUserAsync()
+        {
+            ReferralUser = await context.Referrals
+                .AsNoTracking()
+                .Select(r => new Referral() { UserId = r.UserId, Code = r.Code, InvitedUsers = r.InvitedUsers })
+                .FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id);
         }
         /// <summary>
         /// Fill SiteUser property

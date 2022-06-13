@@ -1,0 +1,41 @@
+﻿@page "{id}"
+@model BlogPhone.Pages.admin.ReferralRemoveModel
+@{
+    ViewData["Title"] = "Удаление бонус кода";
+}
+
+<hr />
+<h1 style="color:red">УДАЛЕНИЕ БОНУС КОДА!!! ПОДТВЕРДИТЕ ДЕЙСТВИЕ, ЭТО НЕОБРАТИМО</h1>
+<hr />
+
+<h2>Информация о рефералке:</h2>
+
+<label asp-for="Referral!.Id"></label>
+<input asp-for="Referral!.Id" readonly/><br /><br />
+
+<label asp-for="Referral!.Code"></label>
+<input asp-for="Referral!.Code" readonly/><br /><br />
+
+<label asp-for="Referral!.InvitedUsers"></label>
+<input asp-for="Referral!.InvitedUsers" readonly/><br /><br />
+
+<hr />
+
+<h2>Информация о владельце:</h2>
+
+<label asp-for="Referral!.UserId"></label>
+<input asp-for="Referral!.UserId" readonly/><br /><br />
+
+<label asp-for="ReferralUser!.Name"></label>
+<input asp-for="ReferralUser!.Name" readonly/><br /><br />
+
+<label asp-for="ReferralUser!.Email"></label>
+<input asp-for="ReferralUser!.Email" readonly/><br /><br />
+
+<hr />
+
+<form method="post" asp-antiforgery="true">
+   <br /><button type="submit" style="color:red">УДАЛИТЬ</button><br />
+</form>
+
+<hr />
