@@ -15,7 +15,7 @@ namespace BlogPhone.Pages
         {
             context = db;
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string? code)
         {
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
@@ -25,11 +25,16 @@ namespace BlogPhone.Pages
                 // ban check
                 bool banned = AccessChecker.BanCheck(SiteUser!.BanMs);
                 if (!banned) return Content("You banned on this server, send on this email: " + AccessChecker.EMAIL);
-                // ---------
 
                 IsAuthorize = HttpContext.User.Identity.IsAuthenticated;
             }
 
+            // Referral code -------------------------------------------------------------
+            if (code is not null)
+            {
+                bool codeExist = await Referral.IsCodeAlreadyExist(code);
+                if (codeExist) Response.Cookies.Append("bonus", code);
+            }
 
             // "Показать больше" and "скрыть" buttons ------------------------------------
             if (Request.Cookies["indexLoad"] is null)
