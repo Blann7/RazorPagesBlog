@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace BlogPhone.Models
+namespace BlogPhone.Models.Database
 {
     public class ApplicationContext : DbContext
     {

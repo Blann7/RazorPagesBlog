@@ -2,6 +2,7 @@
 using BlogPhone.Models;
 using BlogPhone.BackgroundServices.Messages;
 using BlogPhone.BackgroundServices.Exceptions;
+using BlogPhone.Models.Database;
 
 namespace BlogPhone.BackgroundServices
 {

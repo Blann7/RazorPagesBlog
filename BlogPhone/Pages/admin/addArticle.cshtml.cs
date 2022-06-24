@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using BlogPhone.Models.Database;
 
 namespace BlogPhone.Pages
 {

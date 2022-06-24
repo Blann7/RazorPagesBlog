@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
+using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages
 {
@@ -17,6 +19,7 @@ namespace BlogPhone.Pages
         }
         public async Task<IActionResult> OnGetAsync(string? code)
         {
+            TempLogFile.Create();
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
                 (bool, bool) getInfoResult = await TryGetSiteUserAsync();

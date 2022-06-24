@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using BlogPhone.Models.Database;
 
 namespace BlogPhone.Pages.admin
 {

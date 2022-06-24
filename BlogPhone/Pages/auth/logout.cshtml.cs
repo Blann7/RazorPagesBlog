@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
+using BlogPhone.Models.Database;
 
 namespace BlogPhone.Pages.Auth
 {

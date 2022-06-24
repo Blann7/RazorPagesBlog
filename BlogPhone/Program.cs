@@ -1,18 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using BlogPhone.Models;
 using BlogPhone.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-//string connection = builder.Configuration.GetConnectionString("Development");
-string connection = builder.Configuration.GetConnectionString("DB_Host_dev");
-//string connection = builder.Configuration.GetConnectionString("RegRu");
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-
+// Main application database ----------------------------------------------------------------------
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DB_Host_dev"))); // RegRu
+// LogViewer database (log system) ----------------------------------------------------------------
+builder.Services.AddDbContext<LogContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("LogViewer")));
+// ------------------------------------------------------------------------------------------------
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => 
     {

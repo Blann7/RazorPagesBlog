@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
+using BlogPhone.Models.Database;
 
 namespace BlogPhone.Pages.admin
 {

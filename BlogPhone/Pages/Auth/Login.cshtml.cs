@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.Auth
 {

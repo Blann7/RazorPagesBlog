@@ -1,10 +1,10 @@
-﻿namespace BlogPhone.Models
+﻿namespace BlogPhone.Models.Database
 {
     public class AboutUsInfo
     {
         public int Id { get; set; }
         // paragraph 1
-        public string? P1_Title { get; set; } 
+        public string? P1_Title { get; set; }
         public string? P1_Text { get; set; }
         public byte[]? P1_ImageData { get; set; }
         // paragraph 2
