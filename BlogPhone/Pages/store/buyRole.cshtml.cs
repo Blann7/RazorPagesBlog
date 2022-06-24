@@ -5,19 +5,22 @@ using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.store
 {
     [Authorize]
     public class BuyRoleModel : PageModel
     {
-        readonly ApplicationContext context;
-        int roleCost;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
+        private int roleCost;
         public string? Role { get; set; }
         public User? SiteUser { get; set; }
-        public BuyRoleModel(ApplicationContext db)
+        public BuyRoleModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync(string role)
         {
@@ -55,6 +58,8 @@ namespace BlogPhone.Pages.store
                     SiteUser.RoleValidityMs = DateTimeOffset.UtcNow.AddDays(31).ToUnixTimeMilliseconds();
                 else
                     SiteUser.RoleValidityMs = DateTimeOffset.UtcNow.AddYears(100).ToUnixTimeMilliseconds();
+
+                dbLogger.Add(SiteUser.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.BUY_ROLE, $"Купил роль {role} (-{roleCost}рублей)");
 
                 context.Users.Update(SiteUser);
                 await context.SaveChangesAsync();

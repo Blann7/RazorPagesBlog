@@ -3,31 +3,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.admin
 {
     [Authorize]
     public class aboutUsChangeModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         [BindProperty] public AboutUsInfo? AUI { get; set; }
         public AboutUsInfo? oldAUI { get; set; }
         [BindProperty] public IFormFile? Image1 { get; set; }
         [BindProperty] public IFormFile? Image2 { get; set; }
         public User? SiteUser { get; set; }
-        public aboutUsChangeModel(ApplicationContext db)
+        public aboutUsChangeModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync()
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
-            if (!access) return RedirectToPage("/auth/logout");
+            if (getInfoResult != (true, true)) return NotFound();
 
             AUI = await context.AboutUsPage.FirstOrDefaultAsync();
 
@@ -35,6 +34,9 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return NotFound();
+
             oldAUI = await context.AboutUsPage.FirstOrDefaultAsync();
             if (oldAUI is null) return BadRequest();
             if (AUI is null) return RedirectToPage("/admin/aboutUsChange");
@@ -57,6 +59,7 @@ namespace BlogPhone.Pages.admin
             context.AboutUsPage.Update(oldAUI);
             await context.SaveChangesAsync();
 
+            dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.EDIT_ABOUT_US, "Изменил страницу about us");
             return RedirectToPage("/admin/aboutUsChange");
         }
         /// <summary>
@@ -69,9 +72,11 @@ namespace BlogPhone.Pages.admin
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder")) return (false, true);
 
             ViewData["email"] = SiteUser.Email;
 

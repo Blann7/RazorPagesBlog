@@ -4,36 +4,38 @@ using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.admin
 {
     [Authorize]
     public class ArticlesModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         public List<ArticleBlog>? Articles { get; set; }
         public User? SiteUser { get; set; }
         [BindProperty] public string? articleId { get; set; }
-        public ArticlesModel(ApplicationContext db)
+        public ArticlesModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync(string? id)
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
-            if (!access) return BadRequest();
+            if (getInfoResult != (true, true)) return NotFound();
 
             if(id is not null) // for remove article
             {
                 ArticleBlog? article = await context.ArticleBlogs.FirstOrDefaultAsync(a => a.Id.ToString() == id);
-                if (article is null) return NotFound();
+                if (article is null) return BadRequest();
 
                 context.ArticleBlogs.Remove(article);
                 await context.SaveChangesAsync();
 
+                dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.DELETE_ARTICLE, 
+                    $"Удалил статью (id - {id}) - '{article.Label}'");
                 return Redirect("/admin/articles");
             }
 
@@ -45,11 +47,12 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if (articleId is null) return NotFound();
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return NotFound();
 
-            string? idString = HttpContext.User.FindFirst("Id")?.Value;
-            if (idString is null) return RedirectToPage("/auth/logout");
-            SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+            if (articleId is null) return BadRequest();
+
+            /// test full user
 
             ArticleBlog? article = await context.ArticleBlogs.AsNoTracking().FirstOrDefaultAsync(a => a.Id.ToString() == articleId);
             if (article is null) return RedirectToPage("/admin/articles");
@@ -67,11 +70,25 @@ namespace BlogPhone.Pages.admin
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder")) return (false, true);
+
             return (true, true);
         }
+        //private async Task<(bool, bool)> TryGetFULLSiteUserAsync()
+        //{
+        //    string? idString = HttpContext.User.FindFirst("Id")?.Value;
+        //    if (idString is null) return (false, false);
+
+        //    SiteUser = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id.ToString() == idString);
+        //    if (SiteUser is null) return (true, false);
+
+        //    if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder")) return (false, true);
+
+        //    return (true, true);
+        //}
     }
 }

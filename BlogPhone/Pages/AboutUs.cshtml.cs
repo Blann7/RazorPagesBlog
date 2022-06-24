@@ -8,7 +8,7 @@ namespace BlogPhone.Pages
 {
     public class AboutUsModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
         public AboutUsInfo? AUI { get; set; }

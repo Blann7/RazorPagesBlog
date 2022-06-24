@@ -13,15 +13,17 @@ namespace BlogPhone.Pages.Auth
 {
     public class LoginModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         [BindProperty] public string? UserName { get; set; }
         [BindProperty] public string? UserPassword { get; set; }
         [BindProperty] public bool UserSaveMe { get; set; } = false;
         public bool IsModalShow { get; set; } = false;
         public string Message { get; set; } = "";
-        public LoginModel(ApplicationContext db)
+        public LoginModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
@@ -56,6 +58,7 @@ namespace BlogPhone.Pages.Auth
                 new ClaimsPrincipal(claimsIdentity),
                 authenticationProperties);
 
+            dbLogger.Add(user.Id, user.Name!, LogViewer.Models.LogTypes.LogType.LOGIN, "Вошёл");
             return RedirectToPage(returnUrl ?? "/index");
         }
     }

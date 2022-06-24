@@ -11,8 +11,6 @@ namespace BlogPhone.Models.LogViewer.Database
         public DbSet<LogString> LogStrings { get; set; } = null!;
 
         public LogContext() { }
-        public LogContext(DbContextOptions<LogContext> options) : base(options) { }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=62.109.29.6;Port=32968;Database=main;Username=admin;Password=w0HMCVFq1");

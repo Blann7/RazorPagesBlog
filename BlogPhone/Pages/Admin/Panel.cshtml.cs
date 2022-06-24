@@ -10,7 +10,7 @@ namespace BlogPhone.Pages.Admin
     [Authorize]
     public class PanelModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
 
@@ -21,10 +21,7 @@ namespace BlogPhone.Pages.Admin
         public async Task<IActionResult> OnGetAsync()
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
-            if (!access) return BadRequest();
+            if (getInfoResult != (true, true)) return NotFound();
 
             return Page();
         }
@@ -41,6 +38,8 @@ namespace BlogPhone.Pages.Admin
                 .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role, FullDostup = u.FullDostup })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder")) return (false, true);
 
             return (true, true);
         }

@@ -4,18 +4,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.Office
 {
     [Authorize]
     public class UserModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         public User? SiteUser { get; set; }
         public Referral? ReferralUser { get; set; }
-        public UserModel(ApplicationContext db)
+        public UserModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,19 +43,8 @@ namespace BlogPhone.Pages.Office
             await context.Referrals.AddAsync(referral);
             await context.SaveChangesAsync();
 
-            return RedirectToPage("/office/user");
-        }
-        public async Task<IActionResult> OnPostDeleteAsync()
-        {
-            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.UserId == SiteUser!.Id); // full loading (w/o .Select)
-            if (referral is null) return Content("refferal is null", "text/html");
-
-            context.Referrals.Remove(referral);
-            await context.SaveChangesAsync();
-
+            dbLogger.Add(SiteUser.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.REFERRAL_GENERATE_NEW_LINK, 
+                $"Создал новую реферальную ссылку - {referral.Code}");
             return RedirectToPage("/office/user");
         }
         /// <summary>
@@ -76,7 +68,7 @@ namespace BlogPhone.Pages.Office
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User() { Id = u.Id })
+                .Select(u => new User() { Id = u.Id, Name = u.Name })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

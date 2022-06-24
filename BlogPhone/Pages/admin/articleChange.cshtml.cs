@@ -4,29 +4,29 @@ using BlogPhone.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.admin
 {
     [Authorize]
     public class ChangeArticleModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         public ArticleBlog? Article { get; set; }
         [BindProperty] public string? Label { get; set; }
         [BindProperty] public string? ArticleText { get; set; }
         [BindProperty] public IFormFile? Image { get; set; }
         public User? SiteUser { get; set; }
-        public ChangeArticleModel(ApplicationContext db)
+        public ChangeArticleModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync(string id)
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder");
-            if (!access) return BadRequest();
+            if (getInfoResult != (true, true)) return NotFound();
 
             Article = await context.ArticleBlogs.AsNoTracking().FirstOrDefaultAsync(a => a.Id.ToString() == id);
             if (Article is null) return NotFound();
@@ -35,8 +35,11 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnPostAsync(string id)
         {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return NotFound();
+
             Article = await context.ArticleBlogs.FirstOrDefaultAsync(a => a.Id.ToString() == id);
-            if (Article is null) return NotFound();
+            if (Article is null) return BadRequest();
 
             Article.Label = Label;
             Article.ArticleText = ArticleText;
@@ -48,6 +51,7 @@ namespace BlogPhone.Pages.admin
             context.ArticleBlogs.Update(Article);
             await context.SaveChangesAsync();
 
+            dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.CHANGE_ARTICLE, $"Изменил статью (id - {id}) - '{Label}'");
             return RedirectToPage("/admin/articles");
         }
         /// <summary>
@@ -60,9 +64,11 @@ namespace BlogPhone.Pages.admin
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin", "moder")) return (false, true);
 
             ViewData["email"] = SiteUser.Email;
             return (true, true);

@@ -9,7 +9,7 @@ namespace BlogPhone.Pages
 {
     public class IndexModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
         public List<ArticleBlog> Articles { get; set; } = new();
         public bool IsAuthorize { get; set; } = false;
         public User? SiteUser { get; set; }
@@ -19,7 +19,6 @@ namespace BlogPhone.Pages
         }
         public async Task<IActionResult> OnGetAsync(string? code)
         {
-            TempLogFile.Create();
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
                 (bool, bool) getInfoResult = await TryGetSiteUserAsync();
@@ -79,7 +78,7 @@ namespace BlogPhone.Pages
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                    .Select(u => new User { Id = u.Id, Email = u.Email, BanMs = u.BanMs })
+                    .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, BanMs = u.BanMs })
                     .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
 

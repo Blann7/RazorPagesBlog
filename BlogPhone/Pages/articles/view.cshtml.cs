@@ -8,7 +8,7 @@ namespace BlogPhone.Pages
 {
     public class ViewModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
         public ArticleBlog? Article { get; set; }
         public User? SiteUser { get; set; }
         public ViewModel(ApplicationContext db)

@@ -7,17 +7,20 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages
 {
     public class RegisterModel : PageModel
     {
-        readonly ApplicationContext context;
+        private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         [BindProperty] public User SiteUser { get; set; } = new();
 
-        public RegisterModel(ApplicationContext db)
+        public RegisterModel(ApplicationContext db, DbLogger dblogger)
         { 
             context = db; 
+            this.dbLogger = dblogger;
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -82,6 +85,8 @@ namespace BlogPhone.Pages
                 new ClaimsPrincipal(claimsIdentity),
                 authenticationProperties);
             // --------------------------------------------
+
+            dbLogger.Add(loginUser.Id, loginUser.Name!, LogViewer.Models.LogTypes.LogType.REGISTER_USER, "Зарегистрировался");
 
             return RedirectToPage("/index");
         }

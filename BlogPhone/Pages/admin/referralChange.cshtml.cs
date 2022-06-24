@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogPhone.Models;
 using Microsoft.AspNetCore.Authorization;
 using BlogPhone.Models.Database;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.Pages.admin
 {
@@ -11,25 +12,22 @@ namespace BlogPhone.Pages.admin
     public class ReferralChangeModel : PageModel
     {
         private readonly ApplicationContext context;
+        private readonly DbLogger dbLogger;
         public User? SiteUser { get; set; }
         public User? ReferralUser { get; set; }
         [BindProperty] public Referral? Referral { get; set; }
-        public ReferralChangeModel(ApplicationContext db)
+        public ReferralChangeModel(ApplicationContext db, DbLogger dbLogger)
         {
             context = db;
+            this.dbLogger = dbLogger;
         }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id is null) return NotFound();
 
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin");
-            if (!access) return BadRequest();
-
-            if (SiteUser!.FullDostup == false) return NotFound();
-
+            if (getInfoResult != (true, true)) return NotFound();
+            
             Referral = await context.Referrals.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
             if(Referral is null) return NotFound();
 
@@ -42,10 +40,16 @@ namespace BlogPhone.Pages.admin
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+            if (getInfoResult != (true, true)) return NotFound();
+
             if (Referral is null) return BadRequest();
 
             Referral? oldReferral = await context.Referrals.FirstOrDefaultAsync(r => r.Id == Referral.Id);
             if (oldReferral is null) return NotFound();
+
+            dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.EDIT_REFERRAL,
+                $"Изменил рефералку (id - {oldReferral.Id}) [Код {oldReferral.Code} -> {Referral.Code}], [Пригласил {oldReferral.InvitedUsers} -> {Referral.InvitedUsers}]");
 
             oldReferral.Code = Referral.Code;
             oldReferral.InvitedUsers = Referral.InvitedUsers;
@@ -65,9 +69,12 @@ namespace BlogPhone.Pages.admin
             if (idString is null) return (false, false);
 
             SiteUser = await context.Users.AsNoTracking()
-                .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role, FullDostup = u.FullDostup })
+                .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, FullDostup = u.FullDostup })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin")) return (false, true);
+            if (SiteUser!.FullDostup == false) return (false, true);
 
             ViewData["email"] = SiteUser.Email;
 

@@ -22,12 +22,7 @@ namespace BlogPhone.Pages.admin
         public async Task<IActionResult> OnGetAsync()
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
-
-            bool access = AccessChecker.RoleCheck(SiteUser!.Role, "admin");
-            if (!access) return BadRequest();
-
-            if (SiteUser!.FullDostup == false) return NotFound();
+            if (getInfoResult != (true, true)) return NotFound();
 
             await GetReferralsAsync();
 
@@ -36,7 +31,7 @@ namespace BlogPhone.Pages.admin
         public async Task<IActionResult> OnPostAsync()
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return BadRequest();
+            if (getInfoResult != (true, true)) return NotFound();
 
             Referral? referral = await context.Referrals.AsNoTracking().FirstOrDefaultAsync(r => r.Code == Code);
             if (referral is null) return NotFound();
@@ -86,6 +81,9 @@ namespace BlogPhone.Pages.admin
                 .Select(u => new User { Id = u.Id, Email = u.Email, Role = u.Role, FullDostup = u.FullDostup })
                 .FirstOrDefaultAsync(u => u.Id.ToString() == idString);
             if (SiteUser is null) return (true, false);
+
+            if (!AccessChecker.RoleCheck(SiteUser!.Role, "admin")) return (false, true);
+            if (SiteUser!.FullDostup == false) return (false, true);
 
             return (true, true);
         }

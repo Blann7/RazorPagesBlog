@@ -40,14 +40,5 @@
         <p>
             <a type="submit" style="margin-top:20px; color:red" asp-page="/admin/panel">Админ-Панель</a>
         </p>
-
-        @if (Model.ReferralUser is not null)
-        {//
-            <p>
-                <form method="post" asp-antiforgery="true" asp-page-handler="Delete">
-                    <button type="submit">(admin) Удалить свою реф ссылку</button>
-                </form>
-            </p>
-        }
     }
 </div>
