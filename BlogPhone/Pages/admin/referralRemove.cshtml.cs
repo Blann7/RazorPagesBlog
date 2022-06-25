@@ -46,11 +46,18 @@ namespace BlogPhone.Pages.admin
             Referral? referral = await context.Referrals.FirstOrDefaultAsync(r => r.Id == Referral.Id);
             if (referral is null) return NotFound();
 
-            context.Referrals.Remove(referral);
-            await context.SaveChangesAsync();
+            User? owner = await context.Users.AsNoTracking()
+                .Select(u => new User() { Id = u.Id, Name = u.Name })
+                .FirstOrDefaultAsync(u => u.Id == referral.UserId);
+            if (owner is null) return BadRequest();
 
             dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.DELETE_REFERRAL,
                $"Удалил рефералку (id - {referral.Id}) [Код {referral.Code}], [Пригласил {Referral.InvitedUsers}");
+            dbLogger.Add(owner.Id, owner.Name!, LogViewer.Models.LogTypes.LogType.DELETE_REFERRAL,
+               $"Администратор {SiteUser.Name!} (Id - {SiteUser.Id}) удалил рефералку (id - {referral.Id}) [Код {referral.Code}], [Пригласил {Referral.InvitedUsers}");
+
+            context.Referrals.Remove(referral);
+            await context.SaveChangesAsync();
 
             return RedirectToPage("/admin/referrals");
         }

@@ -23,7 +23,7 @@ namespace BlogPhone.BackgroundServices
                     }
                 }
                 Info.Print("________________________________________________");
-                await Task.Delay(60000, stoppingToken); // every min
+                await Task.Delay(30000, stoppingToken); // every min
             }
         }
     }

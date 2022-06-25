@@ -29,7 +29,14 @@ namespace BlogPhone.Pages.Admin
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
             if (getInfoResult != (true, true)) return NotFound();
 
-            if (id is not null && SiteUser!.FullDostup) await SetUserRole(id); // if "снять с поста" button pressed
+            if (id is not null) // if "снять с поста" button pressed
+            {
+                if (SiteUser!.FullDostup == false) return NotFound();
+
+                await SetUserRole(id);
+
+                return RedirectToPage("/admin/heads");
+            }
 
             HighRoleUsers = await context.Users
                 .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityMs = u.RoleValidityMs, FullDostup = u.FullDostup })
@@ -64,21 +71,20 @@ namespace BlogPhone.Pages.Admin
                 $"Выдал вечную роль {UserRole} пользователю {user.Name} (id - {user.Id})");
             return RedirectToPage("/admin/heads");
         }
-        private async Task<IActionResult> SetUserRole(string id)
+        private async Task SetUserRole(string id)
         {
-            (bool, bool) getInfoResult = await TryGetSiteUserAsync();
-            if (getInfoResult != (true, true)) return NotFound();
-            if (SiteUser!.FullDostup == false) return NotFound();
-
             User? user = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == id);
-            if (user is null) return NotFound();
+            if (user is null) return;
+
+            dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.REMOVE_HEADS,
+                $"Снял {user.Name} (Id - {user.Id}) c роли {user.Role}");
+            dbLogger.Add(user.Id, user.Name!, LogViewer.Models.LogTypes.LogType.REMOVE_HEADS,
+                $"Снят администратором {SiteUser.Name} (Id - {SiteUser.Id}) c роли {user.Role}");
 
             user.Role = "user";
 
             context.Users.Update(user);
             await context.SaveChangesAsync();
-
-            return RedirectToPage("/admin/heads");
         }
         /// <summary>
         /// Fill SiteUser property

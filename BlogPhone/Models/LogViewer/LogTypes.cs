@@ -15,7 +15,8 @@ namespace LogViewer.Models
             [Display(Name = "Изменение руководства")] EDIT_HEADS, [Display(Name = "Изменение рефералки")] EDIT_REFERRAL, 
             [Display(Name = "Удаление рефералки")] DELETE_REFERRAL, [Display(Name = "Добавление статьи")] ADD_ARTICLE,
             [Display(Name = "Изменение статьи")] CHANGE_ARTICLE, [Display(Name = "Удаление статьи")] DELETE_ARTICLE,
-            [Display(Name = "Изменение IP")] CHANGE_IP, [Display(Name = "Регистрация")] REGISTER_USER
+            [Display(Name = "Изменение IP")] CHANGE_IP, [Display(Name = "Регистрация")] REGISTER_USER,
+            [Display(Name = "Снятие руководства")] REMOVE_HEADS
         }
         public static readonly Dictionary<LogType, string> logTypesKeyEnum = new()
         {
@@ -33,6 +34,7 @@ namespace LogViewer.Models
             [LogType.EDIT_ABOUT_US] = "about us ред.",
             [LogType.EDIT_USER] = "Изменение пользователя",
             [LogType.EDIT_HEADS] = "Изменение руководства",
+            [LogType.REMOVE_HEADS] = "Снятие руководства",
             [LogType.EDIT_REFERRAL] = "Изменение рефералки",
             [LogType.DELETE_REFERRAL] = "Удаление рефералки",
             [LogType.ADD_ARTICLE] = "Добавление статьи",

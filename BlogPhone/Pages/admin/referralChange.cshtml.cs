@@ -48,8 +48,15 @@ namespace BlogPhone.Pages.admin
             Referral? oldReferral = await context.Referrals.FirstOrDefaultAsync(r => r.Id == Referral.Id);
             if (oldReferral is null) return NotFound();
 
+            User? owner = await context.Users.AsNoTracking()
+                .Select(u => new User() { Id = u.Id, Name = u.Name })
+                .FirstOrDefaultAsync(u => u.Id == oldReferral.UserId);
+            if(owner is null) return BadRequest();
+
             dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.EDIT_REFERRAL,
                 $"Изменил рефералку (id - {oldReferral.Id}) [Код {oldReferral.Code} -> {Referral.Code}], [Пригласил {oldReferral.InvitedUsers} -> {Referral.InvitedUsers}]");
+            dbLogger.Add(owner.Id, owner.Name!, LogViewer.Models.LogTypes.LogType.EDIT_REFERRAL,
+                $"Администратор {SiteUser.Name!} (Id - {SiteUser.Id}) изменил рефералку (id - {oldReferral.Id}) [Код {oldReferral.Code} -> {Referral.Code}], [Пригласил {oldReferral.InvitedUsers} -> {Referral.InvitedUsers}]");
 
             oldReferral.Code = Referral.Code;
             oldReferral.InvitedUsers = Referral.InvitedUsers;
