@@ -3,6 +3,8 @@ using BlogPhone.Models;
 using BlogPhone.BackgroundServices.Messages;
 using BlogPhone.BackgroundServices.Exceptions;
 using BlogPhone.Models.Database;
+using Microsoft.AspNetCore.Mvc;
+using BlogPhone.Models.LogViewer;
 
 namespace BlogPhone.BackgroundServices
 {
@@ -19,7 +21,7 @@ namespace BlogPhone.BackgroundServices
             }
         }
 
-        private async Task ValidateRoleChecker()
+        private async Task ValidateRoleChecker([FromServices] DbLogger dbLogger)
         {
             Info.Print("ValidateRoleChecker", $"UTC: {DateTimeOffset.UtcNow.ToString("G")}");
 
@@ -47,9 +49,11 @@ namespace BlogPhone.BackgroundServices
                         if (fullUser is null)
                             throw new VC_Exception("ValidateRoleChecker", "fullUser is null");
 
-                        fullUser.Role = "user"; // reset role to default
-
                         Info.Print("ValidateRoleChecker", $"Снят: (id {fullUser.Id}) {fullUser.Name}");
+                        dbLogger.Add(fullUser.Id, fullUser.Name!, LogViewer.Models.LogTypes.LogType.EXPIRED_ROLE,
+                            $"Истекла роль {fullUser.Role}");
+
+                        fullUser.Role = "user"; // reset role to default
 
                         context.Users.Update(fullUser);
                         await context.SaveChangesAsync();
