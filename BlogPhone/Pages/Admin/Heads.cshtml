@@ -120,7 +120,7 @@
                         <th>
                             @if(Model.SiteUser.FullDostup)
                             {
-                                <text>|| <a asp-page="/admin/heads" asp-route-id="@user.Id">Снять с поста</a></text>
+                                <text>|| <a asp-page="/admin/heads" asp-route-id="@user.Id" asp-page-handler="Remove">Снять с поста</a></text>
                             }
                         </th>
                     </tr>

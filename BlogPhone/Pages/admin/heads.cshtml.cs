@@ -24,25 +24,29 @@ namespace BlogPhone.Pages.Admin
             context = db;
             this.dbLogger = dbLogger;
         }
-        public async Task<IActionResult> OnGetAsync(string? id) // id is not null in case of delete selected account
+        public async Task<IActionResult> OnGetAsync()
         {
             (bool, bool) getInfoResult = await TryGetSiteUserAsync();
             if (getInfoResult != (true, true)) return NotFound();
-
-            if (id is not null) // if "снять с поста" button pressed
-            {
-                if (SiteUser!.FullDostup == false) return NotFound();
-
-                await SetUserRole(id);
-
-                return RedirectToPage("/admin/heads");
-            }
 
             HighRoleUsers = await context.Users
                 .Select(u => new User { Id = u.Id, Name = u.Name, Email = u.Email, Role = u.Role, RoleValidityMs = u.RoleValidityMs, FullDostup = u.FullDostup })
                 .Where(u => u.Role != "user").ToListAsync();
 
             return Page();
+        }
+        public async Task<IActionResult> OnGetRemoveAsync(string? id) // remove selected account
+        {
+            if (id is not null) // if "снять с поста" button pressed
+            {
+                (bool, bool) getInfoResult = await TryGetSiteUserAsync();
+                if (getInfoResult != (true, true)) return NotFound();
+
+                if (SiteUser!.FullDostup == false) return NotFound();
+                
+                await SetUserRole(id);
+            }
+            return RedirectToPage("/admin/heads");
         }
         public async Task<IActionResult> OnPostAsync()
         {
