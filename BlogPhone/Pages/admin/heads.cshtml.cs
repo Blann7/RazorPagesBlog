@@ -72,7 +72,10 @@ namespace BlogPhone.Pages.Admin
             await context.SaveChangesAsync();
 
             dbLogger.Add(SiteUser!.Id, SiteUser.Name!, LogViewer.Models.LogTypes.LogType.EDIT_HEADS, 
-                $"Выдал вечную роль {UserRole} пользователю {user.Name} (id - {user.Id})");
+                $"Выдал вечную роль {UserRole} [FullDostup: {UserFullDostup}] пользователю {user.Name} (id - {user.Id})");
+            dbLogger.Add(user!.Id, user.Name!, LogViewer.Models.LogTypes.LogType.EDIT_HEADS,
+                $"Администратор {SiteUser.Name!} (Id - {SiteUser!.Id}) выдал вечную роль {UserRole} [FullDostup: {UserFullDostup}] пользователю {user.Name} (id - {user.Id})");
+
             return RedirectToPage("/admin/heads");
         }
         private async Task SetUserRole(string id)
