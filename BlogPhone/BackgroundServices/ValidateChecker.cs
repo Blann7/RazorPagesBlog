@@ -10,6 +10,7 @@ namespace BlogPhone.BackgroundServices
 {
     public class ValidateChecker : BackgroundService
     {
+        DbLogger dbLogger = new();
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -21,7 +22,7 @@ namespace BlogPhone.BackgroundServices
             }
         }
 
-        private async Task ValidateRoleChecker([FromServices] DbLogger dbLogger)
+        private async Task ValidateRoleChecker()
         {
             Info.Print("ValidateRoleChecker", $"UTC: {DateTimeOffset.UtcNow.ToString("G")}");
 
